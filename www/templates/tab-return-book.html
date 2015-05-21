@@ -1,20 +1,88 @@
 <ion-view title="绘本馆自助借阅应用">
     <ion-content padding="true" class="has-header has-footer">
         <!-- search book bar directive -->
-        <div class="list" ng-controller="searchMemeberCtrl">
-            <div class="bar bar-header item-input-inset" >
+        <div class="list padding" ng-controller="searchMemeberCtrl">
+            <div class=" bar bar-header item-input-inset" >
                 <member-search placeholder="请输入手机号"
                             model="member"
                             minlen="11"
+                            result="records"
                             error="error"
+                            clear="clearData()"
                             source="getMemberByPhone(number)"></member-search>
             </div>
-            <span ng-show="member">
-                {{ member | json}}
-            </span>
-            <span ng-show="error">{{error}}</span>
+            <div class="list card" ng-show="member">
+                <div class="item item-divider">会员信息</div>
+                <div class="item item-body">
+                    <div>
+                        <p>卡号：
+                            <strong>{{member.card_number}}</strong>
+                        </p>
+
+                        <p>宝贝名字：
+                            <strong>{{member.baby_name}}</strong>
+                        </p>
+
+                        <p>手机号：
+                            <strong>{{member.phone_number}}</strong>
+                        </p>
+
+                        <p>办卡时间：
+                            <strong>{{member.active_time | date:'yyyy/MM/dd' }}</strong>
+                        </p>
+
+                        <p>有效期至：
+                            <strong>{{member.valid_days}}</strong>
+                        </p>
+
+                        <p>有效期至：
+                            <strong>{{member.end_time | date:'yyyy/MM/dd'}}</strong>
+                        </p>
+
+                        <p>借阅状态：
+                            <strong>{{records.length}}</strong>/<strong>{{member.max_book}}</strong>
+                        </p>
+
+                    </div>
+                </div>
+            </div>
+            <span ng-show="error" class="error-msg">{{error}}</span>
+            <!--<span ng-show="records.length">{{ records | json }}</span>-->
+            <h3 ng-show="member">正在借阅中的图书</h3>
+            <span ng-show="member">侧滑选择归还哪一本书</span>
+            <ion-list>
+                <ion-item class="item-remove-animate item-icon-right"
+                    ng-repeat="record in records"
+                    type="item-text-wrap"
+                    <h3 ng-class="{positive: record.isSelected}">{{record.inventory.name}}</h3>
+                    <p><i class="ion-ios-barcode">&nbsp;&nbsp;{{record.inventory.inv_code}}</i>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <i class="ion-ios-location">&nbsp;&nbsp;{{record.inventory.location}}</i> </p>
+                    <i class="icon ion-chevron-right "></i>
+                    <ion-option-button class="button-positive" ng-click="add($index)">
+                        选中
+                    </ion-option-button>
+                    <ion-option-button class="button-assertive" ng-click="remove($index)">
+                        不选
+                    </ion-option-button>
+                </ion-item>
+            </ion-list>
+            <div ng-show="returnResultMessage">
+                <span ng-bind="returnResultMessage"></span>
+            </div>
+            <span ng-show="member && totalNumber == 0 ">没要还的书了，新选几本？</span>
+
+            <div class=" item-input-inset" >
+                <div class="item-input-wrapper" ng-show="checkedCount">
+                    <i class="icon "
+                       ng-class="{'ion-ios-locked': !isValid(secretKey),  'ion-checkmark-circled': isValid(secretKey)}">
+                     </i>
+                    <input type="password" placeholder="请寻找工作人员输入口令" ng-model="secretKey">
+                </div>
+            </div>
+            <button ng-show="checkedCount && isValid(secretKey)"
+                    class="button-positive button-full  button"
+                    ng-click="returnSelectedBooks()">选好了，还书！</button>
+
         </div>
-
-
     </ion-content>
 </ion-view>

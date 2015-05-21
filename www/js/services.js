@@ -52,32 +52,13 @@ angular.module('starter.services', [])
 });
 
 app.constant('GENERAL_CONFIG', {
-  baseUrl: 'http://hbg-pre-build.herokuapp.com'
-})
+  baseUrl: 'http://hbg-pre-build.herokuapp.com',
+  apiKey: 'xinnix',
+  secretKey: 'ok'
+});
+
 app.factory('Inventory', ['$http', '$q', 'GENERAL_CONFIG', function($http, $q, GENERAL_CONFIG){
   var self = this;
-  
-  // self.getAll = function() {
-  //   var deferred = $q.defer();
-  //   $http.get(url).success(function(data){
-  //     deferred.resolve(data);
-  //   }).error(function(err){
-  //     deferred.reject(err);
-  //   })
-
-  //   return deferred.promise;
-  // };
-
-  // self.getFirst = function(number) {
-  //   var deferred = $q.defer();
-  //   $http.get(url).success(function(data){
-  //     deferred.resolve(data);
-  //   }).error(function(err){
-  //     deferred.reject(err);
-  //   })
-
-  //   return deferred.promise;
-  // };
 
   self.getByName = function(name) {
     var _url = GENERAL_CONFIG.baseUrl + '/inventories/mob/name/' + name;
@@ -86,14 +67,12 @@ app.factory('Inventory', ['$http', '$q', 'GENERAL_CONFIG', function($http, $q, G
       deferred.resolve(data);
     }).error(function(err){
       deferred.reject(err);
-    })
+    });
 
     return deferred.promise;
-  }
-
+  };
   return self;
 }]);
-
 
 app.factory('Member', ['$http', '$q', 'GENERAL_CONFIG', function($http, $q, GENERAL_CONFIG){
   var self = this;
@@ -121,9 +100,26 @@ app.factory('Books', function($http, $q, GENERAL_CONFIG) {
     var url = GENERAL_CONFIG.baseUrl + '/records/mob/' + mId;
 
     $http.get(url).success(function(data){
-      deferred.resolve(data);
+      var records = [];
+      for(var i=0; i < data.length; i++){
+        if (data[i].status === 'R') // R: renting
+          records.push(data[i]);
+      }
+      deferred.resolve(records);
     }).error(function(err){
       deferred.reject(err);
+    });
+    return deferred.promise;
+  };
+
+  self.returnBook = function (recordId){
+    var deferred = $q.defer();
+    var url = GENERAL_CONFIG.baseUrl + '/records/mob/return/' + recordId;
+    // todo: send a put action. and get the return.
+    $http.get(url).success(function(data){
+      deferred.resolve(data);  // if succ, data shoule be record obj.
+    }).error(function(err){
+      deferred.reject(recordId);
     });
     return deferred.promise;
   };

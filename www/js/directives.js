@@ -1,24 +1,14 @@
 'use strict';
 
-app.directive('ionSearch', function($timeout) {
+app.directive('ionSearch', function($timeout, $ionicLoading) {
     return {
         restrict: 'E',
         replace: true,
         scope: {
             getData: '&source',
             model: '=?',
-            search: '=?filter'
-        },
-        controller: function($scope, $ionicLoading){
-            $scope.showLoading = function(str){
-                $ionicLoading.show({
-                    template: '<i class="ion-load-c"></i><br/>找找 ' + str + '...'
-                })
-            };
-
-            $scope.hideLoading = function() {
-                $ionicLoading.hide();
-            };
+            search: '=?filter',
+            error: '='
         },
         link: function(scope, element, attrs) {
             attrs.minLength = attrs.minLength || 0;
@@ -34,16 +24,29 @@ app.directive('ionSearch', function($timeout) {
                     if (timeout) $timeout.cancel(timeout);
                     timeout = $timeout(function(){
                         if (newValue.length > attrs.minLength) {
-                            scope.showLoading(newValue);
+                            $ionicLoading.show({
+                                template: '<i class="ion-load-c"></i><br/>找找 ' + newValue + '...'
+                            });
                             scope.getData({str: newValue}).then(function (results) {
                                 scope.model = results;
-                                scope.hideLoading();
+                                if(scope.model.length === 0) {
+                                    scope.error = '没有找到类似的绘本。';
+                                    $timeout(function(){
+                                        scope.error = '';
+                                    }, 2000);
+                                }
+                                $ionicLoading.hide();
                             }, function(err){
+                                scope.error = '没有找到类似的绘本。';
+                                $timeout(function(){
+                                    scope.error = '';
+                                }, 2000);
                                 scope.model = [];
                                 scope.hideLoading();
                             });
                         } else {
                             scope.model = [];
+                            scope.error =null;
                         }
                     }, 1000);
                 });
@@ -61,13 +64,15 @@ app.directive('ionSearch', function($timeout) {
     };
 });
 
-app.directive('memberSearch', function($ionicLoading) {
+app.directive('memberSearch', function(Books, $ionicLoading) {
     return {
         restrict: 'E',
         replace: true,
         scope: {
             getData: '&source',
+            clearData: '&clear',
             model: '=?',
+            records: '=result',
             search: '=?filter',
             minlen: '@',
             error: '='
@@ -94,25 +99,32 @@ app.directive('memberSearch', function($ionicLoading) {
             if (attrs.source) {
                 scope.$watch('search.value', function (newValue, oldValue) {
                     if (newValue.length === attrs.minLength) {
-                        // show loding...
-                        //scope.showLoading(newValue);
                         $ionicLoading.show({
                             template: '<i class="ion-load-c"></i><br/>查询手机号' + newValue + '...'
                         });
 
                         scope.getData({number: newValue}).then(function (result) {
                             scope.model = result;
-                            // loading is ok.
-                            //scope.hideLoading();
+                            // member's valid date
+                            var active_time = new Date(result.active_time).getTime();
+                            scope.model.end_time = active_time + parseInt(result.valid_days) * 24 * 3600 * 1000;;
+
                             $ionicLoading.hide();
+
+                            // get the books
+                            Books.getReturnBooksByMemberId(result['_id']).then(function(results){
+                                scope.records = results;
+                            }, function(err){
+                                console.log('err at get return books by member id: ' + err);
+                            });
                         }, function (err) {
-                            console.log(err);
                             scope.error = '没找到会员';
                             $ionicLoading.hide();
                         });
                     } else {
                         scope.model = null;
                         scope.error = null;
+                        scope.clearData();
                     }
                 });
             }
