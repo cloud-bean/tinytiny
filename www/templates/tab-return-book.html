@@ -1,0 +1,20 @@
+<ion-view title="绘本馆自助借阅应用">
+    <ion-content padding="true" class="has-header has-footer">
+        <!-- search book bar directive -->
+        <div class="list" ng-controller="searchMemeberCtrl">
+            <div class="bar bar-header item-input-inset" >
+                <member-search placeholder="请输入手机号"
+                            model="member"
+                            minlen="11"
+                            error="error"
+                            source="getMemberByPhone(number)"></member-search>
+            </div>
+            <span ng-show="member">
+                {{ member | json}}
+            </span>
+            <span ng-show="error">{{error}}</span>
+        </div>
+
+
+    </ion-content>
+</ion-view>

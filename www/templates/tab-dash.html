@@ -1,28 +1,47 @@
-<ion-view view-title="Dashboard">
-  <ion-content class="padding">
-    <div class="list card">
-      <div class="item item-divider">Recent Updates</div>
-      <div class="item item-body">
-        <div>
-          There is a fire in <b>sector 3</b>
+<ion-view title="绘本馆自助借阅应用">
+    
+    <ion-content padding="true" class="has-header has-footer">
+
+        <!--<div class="button-bar">-->
+            <!--<a href="#/applyReturn" class="button button-large button-outline button-energized button-block">还书</a>-->
+
+            <!--<a href="#/applyBorrow" class="button button-large button-outline  button-royal button-block">借书</a>-->
+        <!--</div>-->
+        
+        <!-- search book bar directive -->
+        <div class="list" ng-controller="searchBookCtrl">
+            <div class="bar bar-header item-input-inset" >
+                <ion-search placeholder="Search a book" 
+                model="books"
+                source="getByName(str)"></ion-search>
+            </div>
+            <ion-list>
+                <ion-item class="item-remove-animate item-avatar item-icon-right"
+                          ng-repeat="book in books"
+                          type="item-text-wrap"
+                          href="#/tab/books/{{book.id}}">
+                    <img ng-src="{{book.img}}" alt="封面图">
+                    <h2>{{book.name}}</h2>
+                    <p><i class="ion-ios-barcode">&nbsp;&nbsp;{{book.inv_code}}</i>&nbsp;&nbsp;&nbsp;&nbsp;
+                        <i class="ion-ios-location">&nbsp;&nbsp;{{book.location}}</i> </p>
+                    <i class="icon ion-chevron-right icon-accessory"></i>
+                    <ion-option-button class="button-assertive" ng-click="remove(book)">
+                        Delete
+                    </ion-option-button>
+                </ion-item>
+            </ion-list>
         </div>
-      </div>
-    </div>
-    <div class="list card">
-      <div class="item item-divider">Health</div>
-      <div class="item item-body">
-        <div>
-          You ate an apple today!
+
+        <div class="content " style="text-align: center;">
+
+            <img  src="/assets/img/hbg2-100x81-logo.png">
+            <h4 >云豆亲子绘本馆</h4>
+            <br/>
+            <p>最享受的时光&nbsp;&nbsp;&nbsp;&nbsp;最高贵的教养</p>
+            <br/>
+            <br/>
+            <a href="#/applyBorrow" class="button button-small button-outline  button-calm">&nbsp;连结绘本世界&nbsp;</a>
         </div>
-      </div>
-    </div>
-    <div class="list card">
-      <div class="item item-divider">Upcoming</div>
-      <div class="item item-body">
-        <div>
-          You have <b>29</b> meetings on your calendar tomorrow.
-        </div>
-      </div>
-    </div>
-  </ion-content>
+
+    </ion-content>
 </ion-view>

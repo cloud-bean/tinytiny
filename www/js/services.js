@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('starter.services', [])
 
 .factory('Chats', function() {
@@ -47,4 +49,84 @@ angular.module('starter.services', [])
       return null;
     }
   };
+});
+
+app.constant('GENERAL_CONFIG', {
+  baseUrl: 'http://hbg-pre-build.herokuapp.com'
+})
+app.factory('Inventory', ['$http', '$q', 'GENERAL_CONFIG', function($http, $q, GENERAL_CONFIG){
+  var self = this;
+  
+  // self.getAll = function() {
+  //   var deferred = $q.defer();
+  //   $http.get(url).success(function(data){
+  //     deferred.resolve(data);
+  //   }).error(function(err){
+  //     deferred.reject(err);
+  //   })
+
+  //   return deferred.promise;
+  // };
+
+  // self.getFirst = function(number) {
+  //   var deferred = $q.defer();
+  //   $http.get(url).success(function(data){
+  //     deferred.resolve(data);
+  //   }).error(function(err){
+  //     deferred.reject(err);
+  //   })
+
+  //   return deferred.promise;
+  // };
+
+  self.getByName = function(name) {
+    var _url = GENERAL_CONFIG.baseUrl + '/inventories/mob/name/' + name;
+    var deferred = $q.defer();
+    $http.get(_url).success(function(data){
+      deferred.resolve(data);
+    }).error(function(err){
+      deferred.reject(err);
+    })
+
+    return deferred.promise;
+  }
+
+  return self;
+}]);
+
+
+app.factory('Member', ['$http', '$q', 'GENERAL_CONFIG', function($http, $q, GENERAL_CONFIG){
+  var self = this;
+  
+  self.getMemberByPhone = function(number) {
+    var deferred = $q.defer();
+    $http.get(GENERAL_CONFIG.baseUrl + '/members/mob/phone/' + number)
+    .success(function(data){
+      deferred.resolve(data);
+    }).error(function(err){
+      deferred.reject(err);
+    });
+
+    return deferred.promise;
+  };
+
+  return self;
+}]);
+
+app.factory('Books', function($http, $q, GENERAL_CONFIG) {
+  var self = this;
+
+  self.getReturnBooksByMemberId = function (mId){
+    var deferred = $q.defer();
+    var url = GENERAL_CONFIG.baseUrl + '/records/mob/' + mId;
+
+    $http.get(url).success(function(data){
+      deferred.resolve(data);
+    }).error(function(err){
+      deferred.reject(err);
+    });
+    return deferred.promise;
+  };
+
+  return self;
 });
