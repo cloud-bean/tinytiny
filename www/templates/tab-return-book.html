@@ -1,16 +1,20 @@
-<ion-view title="绘本馆自助借阅应用">
+<ion-view title="会员还书">
     <ion-content padding="true" class="has-header has-footer">
         <!-- search book bar directive -->
         <div class="list padding" ng-controller="searchMemeberCtrl">
             <div class=" bar bar-header item-input-inset" >
                 <member-search placeholder="请输入手机号"
-                            model="member"
-                            minlen="11"
-                            result="records"
-                            error="error"
-                            clear="clearData()"
-                            source="getMemberByPhone(number)"></member-search>
+                               model="member"
+                               minlen="11"
+                               result="records"
+                               filter="filter"
+                               error="error"
+                               total="totalNumber"
+                               source="getMemberByPhone(number)">
+                </member-search>
             </div>
+
+            <!--会员信息-->
             <div class="list card" ng-show="member">
                 <div class="item item-divider">会员信息</div>
                 <div class="item item-body">
@@ -31,8 +35,8 @@
                             <strong>{{member.active_time | date:'yyyy/MM/dd' }}</strong>
                         </p>
 
-                        <p>有效期至：
-                            <strong>{{member.valid_days}}</strong>
+                        <p>会员期限：
+                            <strong>{{member.valid_days}}天</strong>
                         </p>
 
                         <p>有效期至：
@@ -40,16 +44,29 @@
                         </p>
 
                         <p>借阅状态：
-                            <strong>{{records.length}}</strong>/<strong>{{member.max_book}}</strong>
+                            <strong>{{totalNumber}}</strong>本借阅中 / <strong>{{member.max_book}}</strong>本最多可借
                         </p>
 
                     </div>
                 </div>
             </div>
+
             <span ng-show="error" class="error-msg">{{error}}</span>
-            <!--<span ng-show="records.length">{{ records | json }}</span>-->
             <h3 ng-show="member">正在借阅中的图书</h3>
-            <span ng-show="member">侧滑选择归还哪一本书</span>
+<button ng-click="clearData()">clear data</button>
+            <div ng-show="member">
+                <label class="toggle toggle-small">
+                    <input type="checkbox"  ng-click="toggleSelect()">
+                    <div class="track">
+                        <div class="handle"></div>
+                    </div>
+                全选</label>
+                <br/>
+                <span class="ion-android-warning" ng-show="totalNumber">侧滑选择归还哪一本书</span>
+                <span ng-hide="totalNumber">没要还的书了，新选几本？</span>
+            </div>
+
+            <!--显示正在借阅的图书列表-->
             <ion-list>
                 <ion-item class="item-remove-animate item-icon-right"
                     ng-repeat="record in records"
@@ -66,11 +83,8 @@
                     </ion-option-button>
                 </ion-item>
             </ion-list>
-            <div ng-show="returnResultMessage">
-                <span ng-bind="returnResultMessage"></span>
-            </div>
-            <span ng-show="member && totalNumber == 0 ">没要还的书了，新选几本？</span>
 
+            <!--输入工作人员口令，正确的口令则可以让提交按钮显示。-->
             <div class=" item-input-inset" >
                 <div class="item-input-wrapper" ng-show="checkedCount">
                     <i class="icon "
@@ -79,6 +93,8 @@
                     <input type="password" placeholder="请寻找工作人员输入口令" ng-model="secretKey">
                 </div>
             </div>
+
+            <!--提交还书操作按钮-->
             <button ng-show="checkedCount && isValid(secretKey)"
                     class="button-positive button-full  button"
                     ng-click="returnSelectedBooks()">选好了，还书！</button>

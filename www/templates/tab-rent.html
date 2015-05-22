@@ -1,0 +1,65 @@
+<ion-view title="会员借书">
+    <ion-content padding="true" class="has-header has-footer">
+        <!-- search book bar directive -->
+        <div class="list padding" >
+            <div class=" bar bar-header  item-input-inset" >
+                <div class="item-input-wrapper" >
+                    <i class="icon ion-ios-barcode">
+                    </i>
+                    <input type="text" placeholder="输入绘本的入库编码，例如:104100005694" ng-model="book.barcode">
+                    <i class="icon ion-qr-scanner">
+                    </i>
+                </div>
+            </div>
+        </div>
+        <div class="list padding" >
+            <div class=" bar bar-header item-input-inset" >
+                <member-search placeholder="请输入手机号"
+                               model="member"
+                               minlen="11"
+                               result="records"
+                               error="error"
+                               total="totalNumber"
+                               clear="clearData()"
+                               source="getMemberByPhone(number)">
+                </member-search>
+            </div>
+
+            <!--会员信息-->
+            <div class="list card" ng-show="member">
+                <div class="item item-divider">会员信息</div>
+                <div class="item item-body">
+                    <div>
+                        <p>卡号：
+                            <strong>{{member.card_number}}</strong>
+                        </p>
+
+                        <p>宝贝名字：
+                            <strong>{{member.baby_name}}</strong>
+                        </p>
+
+                        <p>手机号：
+                            <strong>{{member.phone_number}}</strong>
+                        </p>
+
+                        <p>办卡时间：
+                            <strong>{{member.active_time | date:'yyyy/MM/dd' }}</strong>
+                        </p>
+
+                        <p>会员期限：
+                            <strong>{{member.valid_days}}天</strong>
+                        </p>
+
+                        <p>有效期至：
+                            <strong>{{member.end_time | date:'yyyy/MM/dd'}}</strong>
+                        </p>
+
+                        <p>借阅状态：
+                            <strong>{{totalNumber}}</strong>本借阅中 / <strong>{{member.max_book}}</strong>本最多可借
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>
