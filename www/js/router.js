@@ -5,7 +5,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
     // Ionic uses AngularUI Router which uses the concept of states
     // Learn more here: https://github.com/angular-ui/ui-router
     // Set up the various states which the app can be in.
-    // Each state's controller can be found in controllers.js
+    // Each state's controller can be found in help.controller.js
     $stateProvider
 
         // setup an abstract state for the tabs directive
@@ -41,7 +41,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
             url: '/return',
             views: {
                 'tab-return': {
-                    templateUrl: 'templates/tab-return-book.html',
+                    templateUrl: 'templates/tab-return.html',
                     controller: ''  // 必须要在html页面中绑定controller，详细见 tab-return-book.html第4行，调试一下午才发现这个问题。
                 }
             }

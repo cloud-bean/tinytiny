@@ -1,6 +1,6 @@
 'use strict';
 
-app.directive('ionSearch', function($timeout, $ionicLoading) {
+app.directive('searchBook', function($timeout, $ionicLoading) {
     return {
         restrict: 'E',
         replace: true,
@@ -14,6 +14,15 @@ app.directive('ionSearch', function($timeout, $ionicLoading) {
             attrs.minLength = attrs.minLength || 0;
             scope.placeholder = attrs.placeholder || '';
             scope.search = {value: ''};
+
+            // 显示一个错误消息，2s后消失。
+            var showErrMsg = function (msg){
+                scope.error = msg;
+                $timeout(function(){
+                    scope.error = '';
+                }, 2000);
+            };
+
             var timeout;
             if (attrs.class)
                 element.addClass(attrs.class);
@@ -30,19 +39,13 @@ app.directive('ionSearch', function($timeout, $ionicLoading) {
                             scope.getData({str: newValue}).then(function (results) {
                                 scope.model = results;
                                 if(scope.model.length === 0) {
-                                    scope.error = '没有找到类似的绘本。';
-                                    $timeout(function(){
-                                        scope.error = '';
-                                    }, 2000);
+                                    showErrMsg('搜索完成，没有找到类似的绘本。');
                                 }
                                 $ionicLoading.hide();
                             }, function(err){
-                                scope.error = '没有找到类似的绘本。';
-                                $timeout(function(){
-                                    scope.error = '';
-                                }, 2000);
+                                showErrMsg('搜索失败，请重试。');
                                 scope.model = [];
-                                scope.hideLoading();
+                                $ionicLoading.hide();
                             });
                         } else {
                             scope.model = [];

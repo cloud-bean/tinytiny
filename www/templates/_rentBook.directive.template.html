@@ -1,0 +1,77 @@
+<div class="list padding" >
+    <div class=" bar bar-header  item-input-inset" >
+        <div class="item-input-wrapper" >
+            <i class="icon ion-ios-barcode">
+            </i>
+            <input type="text" placeholder="输入绘本的入库编码，例如:104100005694" ng-model="book.barcode">
+            <i class="icon ion-qr-scanner">
+            </i>
+        </div>
+    </div>
+</div>
+
+<div class="list padding" >
+    <div class=" bar bar-header  item-input-inset" >
+        <div class="item-input-wrapper" >
+            <i class="icon ion-ios-barcode">
+            </i>
+            <input type="text" placeholder="输入手机号" ng-model="book.phoneNumber">
+            <i class="icon ion-qr-scanner">
+            </i>
+        </div>
+    </div>
+</div>
+
+
+<!--会员信息-->
+<div class="list card" ng-show="member">
+    <div class="item item-divider">会员信息</div>
+    <div class="item item-body">
+        <div>
+            <p>卡号：
+                <strong>{{member.card_number}}</strong>
+            </p>
+
+            <p>宝贝名字：
+                <strong>{{member.baby_name}}</strong>
+            </p>
+
+            <p>手机号：
+                <strong>{{member.phone_number}}</strong>
+            </p>
+
+            <p>办卡时间：
+                <strong>{{member.active_time | date:'yyyy/MM/dd' }}</strong>
+            </p>
+
+            <p>会员期限：
+                <strong>{{member.valid_days}}天</strong>
+            </p>
+
+            <p>有效期至：
+                <strong>{{member.end_time | date:'yyyy/MM/dd'}}</strong>
+            </p>
+
+            <p>借阅状态：
+                <strong>{{totalNumber}}</strong>本借阅中 / <strong>{{member.max_book}}</strong>本最多可借
+            </p>
+        </div>
+    </div>
+</div>
+
+<!--the books list-->
+<ion-list >
+    <h3>计划借阅图书</h3>
+    <ion-item class="item-remove-animate item-avatar item-icon-right"
+              ng-repeat="book in books"
+              type="item-text-wrap"
+            >
+        <img ng-src="{{book.img || 'http://cloudbean.qiniudn.com/mob-gray-logo.png'}}" alt="封面图">
+        <h2>{{book.name}}</h2>
+        <p><i class="ion-ios-barcode">&nbsp;&nbsp;{{book.inv_code}}</i>&nbsp;&nbsp;&nbsp;&nbsp;
+            <i class="ion-ios-location">&nbsp;&nbsp;{{book.location}}</i> </p>
+        <i  ng-click="toggleSelected($index)"
+            ng-class="{'icon ion-ios-circle-filled': book.isSelected, 'icon ion-ios-circle-outline': !book.isSelected}"></i>
+
+    </ion-item>
+</ion-list>

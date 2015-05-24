@@ -1,9 +1,9 @@
 <ion-view title="会员还书">
     <ion-content padding="true" class="has-header has-footer">
         <!-- search book bar directive -->
-        <div class="list padding" ng-controller="searchMemeberCtrl">
+        <div class="list padding" ng-controller="returnBookCtrl">
             <div class=" bar bar-header item-input-inset" >
-                <member-search placeholder="请输入手机号"
+                <return-book placeholder="请输入手机号"
                                model="member"
                                minlen="11"
                                result="records"
@@ -11,7 +11,7 @@
                                error="error"
                                total="totalNumber"
                                source="getMemberByPhone(number)">
-                </member-search>
+                </return-book>
             </div>
 
             <!--会员信息-->
@@ -53,7 +53,7 @@
 
             <span ng-show="error" class="error-msg">{{error}}</span>
             <h3 ng-show="member">正在借阅中的图书</h3>
-<button ng-click="clearData()">clear data</button>
+
             <div ng-show="member">
                 <label class="toggle toggle-small">
                     <input type="checkbox"  ng-click="toggleSelect()">
@@ -62,7 +62,7 @@
                     </div>
                 全选</label>
                 <br/>
-                <span class="ion-android-warning" ng-show="totalNumber">侧滑选择归还哪一本书</span>
+                <span class="ion-android-warning" ng-show="totalNumber">向左侧滑选择归还哪一本书</span>
                 <span ng-hide="totalNumber">没要还的书了，新选几本？</span>
             </div>
 
