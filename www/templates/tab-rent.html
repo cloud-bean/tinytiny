@@ -56,7 +56,7 @@
         <div class="list" ng-show="member.card_number && books.length && checkedCount">
             <input type="password" ng-model="secretKey" placeholder="请寻找工作人员输入口令"/>
             <button ng-show="isValid(secretKey)" class="button button-calm button-full"
-                    ng-click="rentBook()">选好了，借书</button>
+                    ng-click="rentBook(member._id)">选好了，借书</button>
         </div>
 
     </ion-content>

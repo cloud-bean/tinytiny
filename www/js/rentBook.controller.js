@@ -70,13 +70,17 @@ app.controller('rentBookCtrl', ['$scope', '$ionicPopup', '$state','Book', 'Membe
         })
     };
 
-    $scope.rentBook = function (){
+    $scope.rentBook = function (memberId){
         // todo: Book service to rent the book that selected to rent.
         // todo: change the url to show a success message and return to homepage.
         var count = $scope.checkedCount; // 几本书要借
         $scope.succCount = count;  // 检查成功执行借书操作的记录数
         var _books = $scope.books;
-        var _member = $scope.member;
+        //console.log(memberId);
+        //var _member = {
+        //    id: $scope.member['_id']
+        //};
+        //console.log(_member);
         // clear the input data.
         $scope.clearData();
 
@@ -84,7 +88,7 @@ app.controller('rentBookCtrl', ['$scope', '$ionicPopup', '$state','Book', 'Membe
             if (_books[i].isSelected) {  // 判断是否是选中。
                 var bookId =_books[i]['_id'];
                 var bookName = _books[i].name;
-                var memberId = _member['_id'];
+                //var memberId = _member.id;
                 console.log('memberId', memberId, 'bookId: ' , bookId, 'bookName', bookName);
                 Book.rentBook(memberId, bookId, bookName).then(function (data) { // data is the book name
                     $scope.resultMessage += data +  ' 借阅成功!' ;

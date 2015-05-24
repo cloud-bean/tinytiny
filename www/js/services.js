@@ -111,7 +111,7 @@ app.factory('Book', function($http, $q, $timeout, GENERAL_CONFIG) {
     //}).error(function(err){
     //  deferred.reject(bookName);
     //});
-    var dataStr = 'mId' + memberId + '&bId=' + bookId + '&status=R';
+    var dataStr = 'mId=' + memberId + '&bId=' + bookId + '&status=R';
 
     $http({
       url: url,
