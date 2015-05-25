@@ -7,7 +7,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in help.controller.js
-var app = angular.module('hbgApp', ['ionic']);
+var app = angular.module('hbgApp', ['ionic', 'ngCordova']);
 
 app.run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {

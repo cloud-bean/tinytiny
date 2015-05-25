@@ -53,7 +53,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
             views: {
                 'tab-help': {
                     templateUrl: 'templates/tab-help.html',
-                    controller: 'helpCtrl'
+                    controller: ''
                 }
             }
         });

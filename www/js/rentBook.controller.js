@@ -18,7 +18,7 @@ app.controller('rentBookCtrl', ['$scope', '$ionicPopup', '$state','Book', 'Membe
     $scope.getBookByInvCode = function (invCode){
         return Book.getBookByInvCode(invCode);
     };
-
+   
     $scope.addBook = function(searchedBook){
         console.log('$scope.searchedBook', $scope.searchedBook);
         //var _book =  $scope.searchedBook;

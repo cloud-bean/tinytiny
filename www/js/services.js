@@ -3,6 +3,7 @@
 app.constant('GENERAL_CONFIG', {
   baseUrl: 'http://hbg-pre-build.herokuapp.com',
   apiKey: 'xinnix',
+  max_number: 999,
   secretKey: 'ok'
 });
 
@@ -33,6 +34,19 @@ app.factory('Member', ['$http', '$q', 'GENERAL_CONFIG', function($http, $q, GENE
       deferred.resolve(data);
     }).error(function(err){
       deferred.reject(err);
+    });
+
+    return deferred.promise;
+  };
+
+  // get the count of the member renting now
+  self.getRentCount = function (mId) {
+    var deferred = $q.defer();
+    $http.get(GENERAL_CONFIG.baseUrl + '/records/mob/rentCount/' + mId)
+    .success(function(data){
+        deferred.resolve(data.count); // data as { count: x}
+    }).error(function(err){
+        deferred.reject(err);
     });
 
     return deferred.promise;

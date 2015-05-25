@@ -1,20 +1,5 @@
 'use strict';
 
-//app.directive('rentBook', function() {
-//    return {
-//        restrict: 'E',
-//        scope: {
-//            member: '=',
-//            books:'=',
-//            submit: '=?'
-//        },
-//        templateUrl: '/templates/_rentBook.directive.template.html',
-//        link: function(scope, element, attrs) {
-//
-//        }
-//    };
-//});
-
 app.directive('memberSearch', function($ionicLoading, $timeout){
    return {
        restrict: 'E',
