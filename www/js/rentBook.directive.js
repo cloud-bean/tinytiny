@@ -33,10 +33,12 @@ app.directive('memberSearch', function($ionicLoading, $timeout){
                    timeout = $timeout(function(){
                        if (newValue.length == attrs.minLength) {
                            $ionicLoading.show({
-                               template: '<i class="ion-load-c"></i><br/>找找 ' + newValue + '...'
+                               template: '<ion-spinner></ion-spinner><br/>找找 ' + newValue + '...'
                            });
                            scope.getData({phoneNumber: newValue}).then(function (result) {
-                               scope.model = result;
+                               scope.model = result.member;  
+                               scope.model.can_rent_count = result.member.max_book - result.rentCount; 
+                               scope.model.end_time = result.end_time;
                                if(scope.model.length === 0) {
                                    showErrMsg('搜索完成，没有找到。');
                                }
@@ -97,7 +99,7 @@ app.directive('bookSearch', function($timeout, $ionicLoading){
                     timeout = $timeout(function(){
                         if (newValue.length == attrs.minLength) {
                             $ionicLoading.show({
-                                template: '<i class="ion-load-c"></i><br/>找找 ' + newValue + '...'
+                                template: '<ion-spinner></ion-spinner><br/>找找 ' + newValue + '...'
                             });
                             scope.getData({invCode: newValue}).then(function (result) {
                                 scope.model = result;

@@ -34,7 +34,7 @@ app.directive('searchBook', function($timeout, $ionicLoading) {
                     timeout = $timeout(function(){
                         if (newValue.length > attrs.minLength) {
                             $ionicLoading.show({
-                                template: '<i class="ion-load-c"></i><br/>找找 ' + newValue + '...'
+                                template: '<ion-spinner></ion-spinner><br/>找找 ' + newValue + '...'
                             });
                             scope.getData({str: newValue}).then(function (results) {
                                 scope.model = results;

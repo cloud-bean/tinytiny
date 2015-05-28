@@ -34,26 +34,25 @@ app.directive('returnBook', function(Book, $ionicLoading, $timeout) {
                     if (newValue && newValue.length === attrs.minLength) {
 
                         $ionicLoading.show({
-                            template: '<i class="ion-load-c"></i><br/>查询手机号' + newValue + '...'
+                            template: '<ion-spinner></ion-spinner><br/>查询手机号' + newValue + '...'
                         });
 
                         scope.getData({number: newValue}).then(function (result) {
                             console.log('loadingMember...');
 
 
-                            scope.member = result;
+                            scope.member = result.member;
                             // member's valid date
-                            var active_time = new Date(result.active_time).getTime();
-                            scope.member.end_time = active_time + parseInt(result.valid_days) * 24 * 3600 * 1000;;
+                            scope.member.end_time = result.end_time;
 
                             $ionicLoading.show({
-                                template: '<i class="ion-load-c"></i><br/>查询借书信息...'
+                                template: '<ion-spinner></ion-spinner><br/>查询借书信息...'
                             });
 
                             // get the books
-                            Book.getReturnBooksByMemberId(result['_id']).then(function(results){
+                            Book.getReturnBooksByMemberId(result.member['_id']).then(function(results){
                                 console.log('loading return books ...');
-
+                                console.log(results);
                                 scope.records = results;
                                 scope.totalNumber = results.length;
 

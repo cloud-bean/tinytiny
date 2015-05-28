@@ -1,10 +1,11 @@
 'use strict';
 
 app.constant('GENERAL_CONFIG', {
+  //baseUrl: 'http://localhost:3000',
   baseUrl: 'http://hbg-pre-build.herokuapp.com',
   apiKey: 'xinnix',
   max_number: 999,
-  secretKey: 'ok'
+  secretKey: 'ok798'
 });
 
 app.factory('Inventory', ['$http', '$q', 'GENERAL_CONFIG', function($http, $q, GENERAL_CONFIG){
@@ -31,7 +32,14 @@ app.factory('Member', ['$http', '$q', 'GENERAL_CONFIG', function($http, $q, GENE
     var deferred = $q.defer();
     $http.get(GENERAL_CONFIG.baseUrl + '/members/mob/phone/' + number)
     .success(function(data){
-      deferred.resolve(data);
+        // data struct:
+        // { member: member,
+        //   rentCount: count,
+        //   end_time: the invalid day}
+        var active_time = new Date(data.member.active_time).getTime();
+        data.end_time = active_time + parseInt(data.member.valid_days)*24*3600*1000;
+        deferred.resolve(data);
+      
     }).error(function(err){
       deferred.reject(err);
     });
@@ -140,10 +148,6 @@ app.factory('Book', function($http, $q, $timeout, GENERAL_CONFIG) {
       deferred.reject(bookName);
     });
 
-    //// mock the operation.
-    //$timeout(function(){
-    //  deferred.resolve(bookName);
-    //}, 1000);
 
     return deferred.promise;
   };

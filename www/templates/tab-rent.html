@@ -24,16 +24,15 @@
         </div>
 
         <div ng-if="member.card_number" class="item ">
-            <span >{{ member | json }}</span>
             <p>会员卡号：{{ member.card_number }}</p>
             <p>会员手机：{{ member.phone_number }}</p>
             <p>宝宝名字：{{ member.baby_name}}</p>
             <p>激活时间：{{ member.active_time | date:'yyyy-MM-dd'}}</p>
             <p>有效天数：{{ member.valid_days }}</p>
-            <p>是否锁定：{{ member.locked }}</p>
-            <p>会员等级：{{ member.level}}</p>
-            <p>单次最多可借：{{ member.max_book}}</p>
-            <p>单次最多可借：{{ member.can_rent_count}}</p>
+            <p>过期日期：{{ member.end_time| date:'yyyy-MM-dd'}}</p>
+            <p ng-show='member.locked'>已锁定，不可借书。}</p>
+            <p>当前借阅状态：{{ member.max_book - member.can_rent_count }}本借阅中 / {{ member.max_book }} 本单次可借数目</p>
+            <p>本次最多可借：{{ member.can_rent_count}}本</p>
         </div>
         <div ng-show="searchedBook.name" class="item item-remove-animate item-avatar item-icon-right"
                   type="item-text-wrap" >

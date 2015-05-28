@@ -68,6 +68,7 @@
 
             <!--显示正在借阅的图书列表-->
             <ion-list>
+                {{ records | json }}
                 <ion-item class="item-remove-animate item-icon-right"
                     ng-repeat="record in records"
                     type="item-text-wrap"
