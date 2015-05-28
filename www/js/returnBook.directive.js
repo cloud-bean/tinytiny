@@ -34,6 +34,7 @@ app.directive('returnBook', function(Book, $ionicLoading, $timeout) {
                     if (newValue && newValue.length === attrs.minLength) {
 
                         $ionicLoading.show({
+                            noBackdrop: true,
                             template: '<ion-spinner></ion-spinner><br/>查询手机号' + newValue + '...'
                         });
 
@@ -46,6 +47,7 @@ app.directive('returnBook', function(Book, $ionicLoading, $timeout) {
                             scope.member.end_time = result.end_time;
 
                             $ionicLoading.show({
+                                noBackdrop: true,
                                 template: '<ion-spinner></ion-spinner><br/>查询借书信息...'
                             });
 

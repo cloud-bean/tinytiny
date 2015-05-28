@@ -33,6 +33,7 @@ app.directive('memberSearch', function($ionicLoading, $timeout){
                    timeout = $timeout(function(){
                        if (newValue.length == attrs.minLength) {
                            $ionicLoading.show({
+                               noBackdrop: true,
                                template: '<ion-spinner></ion-spinner><br/>找找 ' + newValue + '...'
                            });
                            scope.getData({phoneNumber: newValue}).then(function (result) {
