@@ -1,0 +1,17 @@
+<ion-view view-title="{{book.name}}">
+    <ion-content>
+        <ion-item>       
+            <p> 入库条码: {{book.inv_code }} </p>
+            <p> 位置:{{ book.location }}</p>
+        </ion-item>
+
+        <ion-item class="item-image">
+            <img ng-src="{{book.img}}">
+        </ion-item>
+
+        <ion-item>
+            <p> ISBN {{ book.isbn }} </p>
+            <p> 相关资源：暂无. </p>
+        </ion-item>
+    </ion-content>
+</ion-view>

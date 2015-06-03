@@ -27,6 +27,16 @@ app.config(function($stateProvider, $urlRouterProvider) {
             }
         })
 
+        .state('tab.detail', { 
+            url: '/search/:bookId',
+            views: {
+                'tab-search': {
+                    templateUrl: 'templates/tab-detail.html',
+                    controller: 'showBookCtrl'
+                }
+            }
+        })
+
         .state('tab.rent', {
             url: '/rent',
             views: {

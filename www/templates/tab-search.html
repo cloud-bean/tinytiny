@@ -14,8 +14,8 @@
                 <ion-item class="item-remove-animate item-avatar item-icon-right"
                           ng-repeat="book in books"
                           type="item-text-wrap"
-                          href="#/tab/books/{{book.id}}">
-                    <img ng-src="{{book.img || 'http://cloudbean.qiniudn.com/mob-gray-logo.png'}}" alt="封面图">
+                          href="#/tab/search/{{book.id}}">
+                    <img ng-src="{{book.img || 'img/mob-gray-logo.png'}}" alt="封面图">
                     <h2>{{book.name}}</h2>
                     <p><i class="ion-ios-barcode">&nbsp;&nbsp;{{book.inv_code}}</i>&nbsp;&nbsp;&nbsp;&nbsp;
                         <i class="ion-ios-location">&nbsp;&nbsp;{{book.location}}</i> </p>

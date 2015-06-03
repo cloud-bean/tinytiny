@@ -77,6 +77,19 @@ app.factory('Book', function($http, $q, $timeout, GENERAL_CONFIG) {
     return deferred.promise;
   };
 
+  self.getBookById = function(id){
+    var _url = GENERAL_CONFIG.baseUrl + '/inventories/' + id;
+    var deferred = $q.defer();
+
+    $http.get(_url).success(function(data){
+        deferred.resolve(data);
+    }).error(function(err){
+        deferred.reject('faild to get the book');
+    });
+
+    return deferred.promise;
+  };
+
   /**
    * 获取要归还的图书列表
    * @param mId 数据库中会员的id号
