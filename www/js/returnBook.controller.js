@@ -1,6 +1,6 @@
 'use strict';
 
-app.controller('returnBookCtrl',['$scope', '$timeout', '$state','$ionicPopup', 'Member', 'Book', 'GENERAL_CONFIG', function($scope, $timeout, $state, $ionicPopup, Member, Book, GENERAL_CONFIG){
+app.controller('returnBookCtrl',['$scope', '$timeout', '$state', '$ionicPopup', 'Member', 'Book', 'GENERAL_CONFIG', function($scope, $timeout, $state, $ionicPopup, Member, Book, GENERAL_CONFIG){
 
     $scope.getMemberByPhone = function (number) {
         return Member.getMemberByPhone(number);
@@ -51,7 +51,7 @@ app.controller('returnBookCtrl',['$scope', '$timeout', '$state','$ionicPopup', '
         });
 
         alertPopup.then(function (res) {
-            $state.transitionTo('tab.search');
+            $state.go('tab.search');
         })
     };
 

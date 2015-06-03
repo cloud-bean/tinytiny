@@ -28,17 +28,16 @@ app.directive('memberSearch', function($ionicLoading, $timeout){
 
            if (attrs.source) {
                scope.$watch('search.value', function (newValue, oldValue) {
-
-                   if (timeout) $timeout.cancel(timeout);
-                   timeout = $timeout(function(){
-                       if (newValue.length == attrs.minLength) {
+                   if (newValue.length == attrs.minLength) {
+                       if (timeout) $timeout.cancel(timeout);
+                       timeout = $timeout(function(){
                            $ionicLoading.show({
                                noBackdrop: true,
-                               template: '<ion-spinner></ion-spinner><br/>找找 ' + newValue + '...'
+                               template: '<ion-spinner></ion-spinner><br/>查询手机号 ' + newValue + '...'
                            });
                            scope.getData({phoneNumber: newValue}).then(function (result) {
-                               scope.model = result.member;  
-                               scope.model.can_rent_count = result.member.max_book - result.rentCount; 
+                               scope.model = result.member;
+                               scope.model.can_rent_count = result.member.max_book - result.rentCount;
                                scope.model.end_time = result.end_time;
                                if(scope.model.length === 0) {
                                    showErrMsg('搜索完成，没有找到。');
@@ -49,11 +48,12 @@ app.directive('memberSearch', function($ionicLoading, $timeout){
                                scope.model = [];
                                $ionicLoading.hide();
                            });
-                       } else {
-                           scope.model = [];
-                           scope.error =null;
-                       }
-                   }, 1000);
+
+                       }, 1000);
+                   } else {
+                       scope.model = [];
+                       scope.error =null;
+                   }
                });
            }
 
@@ -77,6 +77,7 @@ app.directive('bookSearch', function($timeout, $ionicLoading){
             minlength: '@',
             model: '=',
             getData: '&source',
+            search: '=?filter',
             error: '='
         },
         link: function(scope, ele, attrs){
@@ -95,13 +96,13 @@ app.directive('bookSearch', function($timeout, $ionicLoading){
 
             if (attrs.source) {
                 scope.$watch('search.value', function (newValue, oldValue) {
+                    if (newValue.length == attrs.minLength) {
+                        if (timeout) $timeout.cancel(timeout);
+                        timeout = $timeout(function(){
 
-                    if (timeout) $timeout.cancel(timeout);
-                    timeout = $timeout(function(){
-                        if (newValue.length == attrs.minLength) {
                             $ionicLoading.show({
                                 noBackdrop: true,
-                                template: '<ion-spinner></ion-spinner><br/>找找 ' + newValue + '...'
+                                template: '<ion-spinner></ion-spinner><br/>查询绘本 ' + newValue + '...'
                             });
                             scope.getData({invCode: newValue}).then(function (result) {
                                 scope.model = result;
@@ -114,11 +115,12 @@ app.directive('bookSearch', function($timeout, $ionicLoading){
                                 scope.model = [];
                                 $ionicLoading.hide();
                             });
-                        } else {
-                            scope.model = [];
-                            scope.error =null;
-                        }
-                    }, 1000);
+
+                        }, 1000);
+                    } else {
+                        scope.model = [];
+                        scope.error =null;
+                    }
                 });
             }
 

@@ -69,7 +69,7 @@ app.factory('Book', function($http, $q, $timeout, GENERAL_CONFIG) {
   self.getBookByInvCode = function (invCode){
     var deferred = $q.defer();
     var url = GENERAL_CONFIG.baseUrl + '/inventories/invCode/' + invCode;
-    $http.get(url).success(function(data){
+    $http.get(url, {cache: false}).success(function(data){
       deferred.resolve(data);
     }).error(function(err){
       deferred.reject(err);

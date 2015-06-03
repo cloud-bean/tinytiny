@@ -32,7 +32,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
             views: {
                 'tab-rent': {
                     templateUrl: 'templates/tab-rent.html',
-                    controller: 'rentBookCtrl'
+                    controller: ''
                 }
             }
         })
@@ -60,5 +60,6 @@ app.config(function($stateProvider, $urlRouterProvider) {
 
     // if none of the above states are matched, use this as the fallback
     $urlRouterProvider.otherwise('/tab/search');
+
 
 });

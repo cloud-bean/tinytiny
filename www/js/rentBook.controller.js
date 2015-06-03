@@ -7,9 +7,17 @@ app.controller('rentBookCtrl', ['$scope', '$ionicPopup', '$state','Book', 'Membe
         $scope.infoMsg='there is the rentBook ctrl.';
         $scope.resultMessage = '';
         $scope.checkedCount = 0;
-        $scope.secretKey = '';
+        $scope.secretKey = '';  // important!!! whatever succ or err , it must be clear.
         $scope.searchedBook = {};
+        $scope.book_filter = {
+            value: ''
+        };
+        $scope.member_filter = {
+            value: ''
+        }
     };
+
+    $scope.init();
 
     $scope.getMemberByPhone = function(number) {
         return Member.getMemberByPhone(number);
@@ -20,9 +28,6 @@ app.controller('rentBookCtrl', ['$scope', '$ionicPopup', '$state','Book', 'Membe
     };
    
     $scope.addBook = function(searchedBook){
-        console.log('$scope.searchedBook', $scope.searchedBook);
-        //var _book =  $scope.searchedBook;
-        console.log('searchedBook', searchedBook);
         var _book =  searchedBook;
         var _hasIt = false;
 
@@ -44,9 +49,7 @@ app.controller('rentBookCtrl', ['$scope', '$ionicPopup', '$state','Book', 'Membe
                 $scope.checkedCount++;
             }
         }
-
     };
-
 
     $scope.clearData = function(){
         $scope.init();
@@ -66,7 +69,7 @@ app.controller('rentBookCtrl', ['$scope', '$ionicPopup', '$state','Book', 'Membe
         });
 
         alertPopup.then(function (res) {
-            $state.transitionTo('tab.search');
+            $state.go('tab.search');
         })
     };
 

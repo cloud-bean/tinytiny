@@ -1,5 +1,5 @@
 <ion-view title="会员借书" ng-init="init()">
-    <ion-content padding="true" class="has-header has-footer">
+    <ion-content padding="true" class="has-header has-footer" ng-controller="rentBookCtrl">
         <!-- search book bar directive -->
         <span class="error-msg" ng-bind="error"></span>
 
@@ -9,6 +9,7 @@
                     minlength="11"
                     model="member"
                     error="error"
+                    filter="member_filter"
                     source="getMemberByPhone(phoneNumber)">
             </member-search>
         </div>
@@ -19,6 +20,7 @@
                     minlength="12"
                     model="searchedBook"
                     error="error"
+                    filter="book_filter"
                     source="getBookByInvCode(invCode)">
             </book-search>
         </div>
@@ -40,7 +42,8 @@
             <h2>{{searchedBook.name}}</h2>
             <p><i class="ion-ios-barcode">&nbsp;&nbsp;{{searchedBook.inv_code}}</i>&nbsp;&nbsp;&nbsp;&nbsp;
                 <i class="ion-ios-location">&nbsp;&nbsp;{{searchedBook.location}}</i>&nbsp;&nbsp;&nbsp;&nbsp;<br/>
-                <i ng-class="{'ion-happy-outline':!searchedBook.isRent, 'ion-sad-outline': searchedBook.isRent}">&nbsp;&nbsp;{{searchedBook.isRent?'借出':'在馆'}}</i>
+                <span>isRent {{searchedBook.isRent}}</span>
+                <i ng-class="{'ion-happy-outline': !searchedBook.isRent, 'ion-sad-outline': searchedBook.isRent}">&nbsp;&nbsp;{{searchedBook.isRent?'借出':'在馆'}}</i>
             </p>
             <i  ng-click="addBook(searchedBook)"
                 ng-class="{'icon ion-ios-circle-filled': searchedBook.isSelected, 'icon ion-ios-circle-outline': !searchedBook.isSelected}"></i>
@@ -56,7 +59,10 @@
                 <img ng-src="{{book.img || 'http://cloudbean.qiniudn.com/mob-gray-logo.png'}}" alt="封面图">
                 <h2>{{book.name}}</h2>
                 <p><i class="ion-ios-barcode">&nbsp;&nbsp;{{book.inv_code}}</i>&nbsp;&nbsp;&nbsp;&nbsp;
-                    <i class="ion-ios-location">&nbsp;&nbsp;{{book.location}}</i> </p>
+                    <i class="ion-ios-location">&nbsp;&nbsp;{{book.location}}</i>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <span ng-show="book.isRent"> 不可借 </span>
+                    <span ng-hide="book.isRent"> 可借</span>
+                </p>
                 <i  ng-click="toggleSelected($index)"
                     ng-class="{'icon ion-ios-circle-filled': book.isSelected, 'icon ion-ios-circle-outline': !book.isSelected}"></i>
 
