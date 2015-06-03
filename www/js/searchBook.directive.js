@@ -1,6 +1,6 @@
 'use strict';
 
-app.directive('searchBook', function($timeout, $ionicLoading) {
+app.directive('searchBook', function($timeout, $ionicLoading, $ionicPlatform) {
     return {
         restrict: 'E',
         replace: true,
@@ -29,14 +29,25 @@ app.directive('searchBook', function($timeout, $ionicLoading) {
 
             if (attrs.source) {
                 scope.$watch('search.value', function (newValue, oldValue) {
-
-                    if (timeout) $timeout.cancel(timeout);
-                    timeout = $timeout(function(){
-                        if (newValue.length > attrs.minLength) {
+                    if (newValue.length > attrs.minLength) {
+                        if (timeout) $timeout.cancel(timeout);
+                        timeout = $timeout(function(){
                             $ionicLoading.show({
                                 noBackdrop: true,
                                 template: '<ion-spinner></ion-spinner><br/>找找 ' + newValue + '...'
                             });
+
+
+                            console.log('should hide the keyboard');
+
+                            $ionicPlatform.ready(function() {
+                                // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
+                                // for form inputs)
+                                if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
+                                    cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+                                }
+                            });
+
                             scope.getData({str: newValue}).then(function (results) {
                                 scope.model = results;
                                 if(scope.model.length === 0) {
@@ -48,11 +59,12 @@ app.directive('searchBook', function($timeout, $ionicLoading) {
                                 scope.model = [];
                                 $ionicLoading.hide();
                             });
-                        } else {
-                            scope.model = [];
-                            scope.error =null;
-                        }
+
                     }, 1000);
+                    } else {
+                        scope.model = [];
+                        scope.error =null;
+                    }
                 });
             }
 
@@ -62,7 +74,7 @@ app.directive('searchBook', function($timeout, $ionicLoading) {
         },
         template: '<div class="item-input-wrapper">' +
                     '<i class="icon ion-ios-search"></i>' +
-                    '<input type="search" placeholder="{{placeholder}}" ng-model="search.value">' +
+                    '<input type="search" autofocus="true" placeholder="{{placeholder}}" ng-model="search.value">' +
                     '<i ng-if="search.value.length > 0" ng-click="clearSearch()" class="icon ion-close"></i>' +
                   '</div>'
     };

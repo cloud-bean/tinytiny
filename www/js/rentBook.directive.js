@@ -64,7 +64,7 @@ app.directive('memberSearch', function($ionicLoading, $timeout){
        template: '<div class="item-input-wrapper">' +
        '<i class="icon ion-person"></i>' +
        '<input type="search" placeholder="{{placeholder}}" ng-model="search.value">' +
-       '<i ng-if="search.value.length > 0" ng-click="clearSearch()" class="icon ion-close"></i>' +
+       '<i ng-if="search.value.length > 0"  ng-click="clearSearch()" class="icon ion-close"></i>' +
        '</div>'
    }
 });
@@ -100,6 +100,7 @@ app.directive('bookSearch', function($timeout, $ionicLoading){
                     timeout = $timeout(function(){
                         if (newValue.length == attrs.minLength) {
                             $ionicLoading.show({
+                                noBackdrop: true,
                                 template: '<ion-spinner></ion-spinner><br/>找找 ' + newValue + '...'
                             });
                             scope.getData({invCode: newValue}).then(function (result) {
@@ -126,7 +127,7 @@ app.directive('bookSearch', function($timeout, $ionicLoading){
             };
         },
         template: '<div class="item-input-wrapper">' +
-        '<i class="icon ion-ios-book"></i>' +
+        '<i class="icon ion-ios-barcode"></i>' +
         '<input type="search" placeholder="{{placeholder}}" ng-model="search.value">' +
         '<i ng-if="search.value.length > 0" ng-click="clearSearch()" class="icon ion-close"></i>' +
         '</div>'

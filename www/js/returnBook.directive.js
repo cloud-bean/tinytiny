@@ -84,7 +84,7 @@ app.directive('returnBook', function(Book, $ionicLoading, $timeout) {
         },
         template: '<div class="item-input-wrapper">' +
         '<i class="icon ion-person"></i>' +
-        '<input type="search" placeholder="{{placeholder}}" ng-model="search.value">' +
+        '<input type="search" autofocus="true" placeholder="{{placeholder}}" ng-model="search.value">' +
         '<i ng-if="search.value.length > 0" ng-click="clearSearch()" class="icon ion-close"></i>' +
         '</div>'
     }
