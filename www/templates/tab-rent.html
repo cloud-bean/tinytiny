@@ -50,31 +50,42 @@
         </div>
 
         <!--the books list-->
-        <ion-list ng-show="books.length">
+        <ion-list class="padding" ng-show="books.length">
             <h3>计划借阅图书</h3>
             <ion-item class="item-remove-animate item-avatar item-icon-right"
                       ng-repeat="book in books"
                       type="item-text-wrap"
                     >
                 <img ng-src="{{book.img || 'http://cloudbean.qiniudn.com/mob-gray-logo.png'}}" alt="封面图">
-                <h2>{{book.name}}</h2>
+                <h2 ng-class="{'positive': book.isSelected}">{{book.name}}</h2>
                 <p><i class="ion-ios-barcode">&nbsp;&nbsp;{{book.inv_code}}</i>&nbsp;&nbsp;&nbsp;&nbsp;
                     <i class="ion-ios-location">&nbsp;&nbsp;{{book.location}}</i>&nbsp;&nbsp;&nbsp;&nbsp;
                     <span ng-show="book.isRent"> 不可借 </span>
                     <span ng-hide="book.isRent"> 可借</span>
                 </p>
                 <i  ng-click="toggleSelected($index)"
-                    ng-class="{'icon ion-ios-circle-filled': book.isSelected, 'icon ion-ios-circle-outline': !book.isSelected}"></i>
+                    ng-class="{'icon positive ion-ios-circle-filled': book.isSelected, 'icon ion-ios-circle-outline': !book.isSelected}"></i>
 
             </ion-item>
+
+            <!--输入口令，口令正确显示借书按钮，点击按钮执行借书操作-->
+            <div class="item item-input-inset" >
+                <div class="item-input-wrapper" ng-show="member.card_number && books.length && checkedCount">
+                    <i class="icon "
+                       ng-class="{' ion-ios-locked': !isValid(secretKey),  'positive icon-large ion-checkmark-circled': isValid(secretKey)}">
+                    </i>
+                    <input type="password" placeholder="请寻找工作人员输入口令" ng-model="secretKey">
+                </div>
+            </div>
+
+            <div class="item">
+                <button ng-show="isValid(secretKey)" class="button button-calm button-full"
+                        ng-click="rentBook(member._id)">选好了，借书</button>
+            </div>
+
         </ion-list>
 
-        <!--输入口令，口令正确显示借书按钮，点击按钮执行借书操作-->
-        <div class="list" ng-show="member.card_number && books.length && checkedCount">
-            <input type="password" ng-model="secretKey" placeholder="请寻找工作人员输入口令"/>
-            <button ng-show="isValid(secretKey)" class="button button-calm button-full"
-                    ng-click="rentBook(member._id)">选好了，借书</button>
-        </div>
+
 
     </ion-content>
 </ion-view>

@@ -1,6 +1,8 @@
 'use strict';
 
-app.controller('returnBookCtrl',['$scope', '$timeout', '$state', '$ionicPopup', 'Member', 'Book', 'GENERAL_CONFIG', function($scope, $timeout, $state, $ionicPopup, Member, Book, GENERAL_CONFIG){
+app.controller('returnBookCtrl',
+    ['$scope', '$timeout', '$state', '$ionicPopup', 'Member', 'Book', 'GENERAL_CONFIG', '$ionicScrollDelegate',
+        function($scope, $timeout, $state, $ionicPopup, Member, Book, GENERAL_CONFIG, $ionicScrollDelegate){
 
     $scope.getMemberByPhone = function (number) {
         return Member.getMemberByPhone(number);
@@ -36,18 +38,21 @@ app.controller('returnBookCtrl',['$scope', '$timeout', '$state', '$ionicPopup', 
         $scope.secretKey = '';
         $scope.checkedCount = 0;
         $scope.resultMessage = '';
-        $scope.member = null;
-        $scope.records = null;
-        $scope.filter = '';
+        $scope.member = {};
+        $scope.records = [];
+        $scope.filter = {
+            value: ''
+        };
+        $scope.isAllSelected = false;
+
+        $ionicScrollDelegate.scrollTop(); // 滚动到top
     };
 
-    $scope.alertAndJump = function(){
+    $scope.alertAndJump = function(message){
         // 1. 弹出提示框，
-        // 2. 3s后跳转到首页。
-
         var alertPopup = $ionicPopup.alert({
             title: '还书操作结果',
-            template: $scope.resultMessage
+            template: message
         });
 
         alertPopup.then(function (res) {
@@ -57,11 +62,11 @@ app.controller('returnBookCtrl',['$scope', '$timeout', '$state', '$ionicPopup', 
 
     $scope.returnSelectedBooks = function(){
         var count = $scope.checkedCount; // 共有几本要还。
-        $scope.succCount = count;  // 检查成功执行还书操作的记录数
+        $scope.succCount = 0;  // 检查成功执行还书操作的记录数
+        $scope.failCount = 0;
         var _records = $scope.records;
 
-        // clear the input data.
-        $scope.clearData();
+
 
         for(var i = 0; count && (i < _records.length); i++){
             if (_records[i].isSelected) {  // 判断是否是选中要归还的。
@@ -69,15 +74,21 @@ app.controller('returnBookCtrl',['$scope', '$timeout', '$state', '$ionicPopup', 
                 var recordBookName = _records[i].inventory.name;
                 console.log('recordId: ' , recordId, 'recordName', recordBookName);
                 Book.returnBook(recordId, recordBookName).then(function (data) { // data is the book name
-                    $scope.resultMessage += data +  ' 归还成功!' ;
-                    $scope.succCount--;
+                    $scope.resultMessage += '<i class="icon ion-ios-checkmark positive icon-large"></i>' + data +  ' 归还成功!<br/>' ;
+                    $scope.checkedCount--;
+                    $scope.succCount++;
                     console.log('succCount:', $scope.succCount);
                 }, function (err) {
-                    $scope.resultMessage += err + ' 归还失败!' ; // error is the recoredID.
+                    $scope.checkedCount--;
+                    $scope.failCount++;
+                    $scope.resultMessage += '<i class="icon ion-alert-circled assertive icon-large"></i>' + err + ' 归还失败!<br/>' ; // error is the recoredID.
                 }).then(function(){
                     console.log('resultMessage' + $scope.resultMessage);
-                    if ($scope.succCount === 0){
-                        $scope.alertAndJump();
+                    if ($scope.checkedCount === 0){
+                        var message = $scope.resultMessage;
+                        // clear the input data.
+                        $scope.clearData();
+                        $scope.alertAndJump(message);
                     }
                 });
             }

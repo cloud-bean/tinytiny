@@ -1,10 +1,12 @@
 'use strict';
 
-app.controller('rentBookCtrl', ['$scope', '$ionicPopup', '$state','Book', 'Member', 'GENERAL_CONFIG', function($scope, $ionicPopup, $state, Book, Member, GENERAL_CONFIG){
+app.controller('rentBookCtrl',
+    ['$scope', '$ionicPopup', '$state','Book', 'Member', 'GENERAL_CONFIG', '$ionicScrollDelegate',
+    function($scope, $ionicPopup, $state, Book, Member, GENERAL_CONFIG, $ionicScrollDelegate){
     $scope.init = function(){
+        $ionicScrollDelegate.scrollTop(); // 滚动到top
         $scope.books = [];
         $scope.member = {};
-        $scope.infoMsg='there is the rentBook ctrl.';
         $scope.resultMessage = '';
         $scope.checkedCount = 0;
         $scope.secretKey = '';  // important!!! whatever succ or err , it must be clear.
@@ -49,6 +51,12 @@ app.controller('rentBookCtrl', ['$scope', '$ionicPopup', '$state','Book', 'Membe
                 $scope.checkedCount++;
             }
         }
+
+        // after check and add to books, clear it.
+        $scope.searchedBook = {};
+        $scope.book_filter = {
+            value:''
+        };
     };
 
     $scope.clearData = function(){
@@ -56,16 +64,21 @@ app.controller('rentBookCtrl', ['$scope', '$ionicPopup', '$state','Book', 'Membe
     };
     
     $scope.toggleSelected = function(index){
-        $scope.books[index].isSelected = !$scope.books[index].isSelected;
+        var oldSelectedStatus = $scope.books[index].isSelected;
+        $scope.books[index].isSelected = !oldSelectedStatus;
+        if (!oldSelectedStatus)
+            $scope.checkedCount++;
+        else
+            $scope.checkedCount--;
     };
 
-    $scope.alertAndJump = function (){
+    $scope.alertAndJump = function (message){
         // 1. 弹出提示框，
         // 2. 点击确定返回首页 即搜索页
 
         var alertPopup = $ionicPopup.alert({
             title: '借书操作结果',
-            template: $scope.resultMessage
+            template: message
         });
 
         alertPopup.then(function (res) {
@@ -77,15 +90,9 @@ app.controller('rentBookCtrl', ['$scope', '$ionicPopup', '$state','Book', 'Membe
         // todo: Book service to rent the book that selected to rent.
         // todo: change the url to show a success message and return to homepage.
         var count = $scope.checkedCount; // 几本书要借
-        $scope.succCount = count;  // 检查成功执行借书操作的记录数
+        $scope.succCount = 0;  // 检查成功执行借书操作的记录数
+        $scope.failCount = 0;
         var _books = $scope.books;
-        //console.log(memberId);
-        //var _member = {
-        //    id: $scope.member['_id']
-        //};
-        //console.log(_member);
-        // clear the input data.
-        $scope.clearData();
 
         for(var i = 0; count && (i < _books.length); i++){
             if (_books[i].isSelected) {  // 判断是否是选中。
@@ -94,15 +101,21 @@ app.controller('rentBookCtrl', ['$scope', '$ionicPopup', '$state','Book', 'Membe
                 //var memberId = _member.id;
                 console.log('memberId', memberId, 'bookId: ' , bookId, 'bookName', bookName);
                 Book.rentBook(memberId, bookId, bookName).then(function (data) { // data is the book name
-                    $scope.resultMessage += data +  ' 借阅成功!' ;
-                    $scope.succCount--;
+                    $scope.resultMessage += '<i class="icon ion-ios-checkmark positive icon-large"></i>' + data +  ' 借阅成功!<br/>' ;
+                    $scope.succCount++;
+                    $scope.checkedCount --;
                     console.log('succCount:', $scope.succCount);
                 }, function (err) {
-                    $scope.resultMessage += err + ' 借阅失败!' ; // error is the recoredID.
+                    $scope.checkedCount --;
+                    $scope.failCount++;
+                    $scope.resultMessage += '<i class="icon ion-alert-circled assertive icon-large"></i>' + err + ' 借阅失败!<br/>' ; // error is the recoredID.
                 }).then(function(){
                     console.log('resultMessage' + $scope.resultMessage);
-                    if ($scope.succCount === 0){
-                        $scope.alertAndJump();
+                    if ($scope.checkedCount === 0){
+                        // 完成任务之后清除数据并跳转。
+                        var message = $scope.resultMessage;
+                        $scope.clearData();
+                        $scope.alertAndJump(message);
                     }
                 });
             }

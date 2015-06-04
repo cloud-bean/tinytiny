@@ -54,7 +54,7 @@ app.directive('returnBook', function(Book, $ionicLoading, $timeout) {
                             // get the books
                             Book.getReturnBooksByMemberId(result.member['_id']).then(function(results){
                                 console.log('loading return books ...');
-                                console.log(results);
+                                //console.log(results);
                                 scope.records = results;
                                 scope.totalNumber = results.length;
 
