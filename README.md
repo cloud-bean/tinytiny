@@ -23,16 +23,21 @@
 ##3.联系我们
 在使用中有任何问题，欢迎反馈给我，可以用以下联系方式跟我交流
 > * 微信订阅号
+
 ![cloudbean](http://7xjhy3.com1.z0.glb.clouddn.com/qrcode_dy.jpg-qrcode)
 > * 微信客服号
+
 ![cloudbean](http://7xjhy3.com1.z0.glb.clouddn.com/kefu-qrcode.jpg-qrcode)
 > * 官网地址
+
     * [http://www.cloud-bean.com][1]
 > * 联系电话
     * 15389088570（张老师）
     * 15349216763（辛老师）
 > * 在线支付地址（__支付宝__）
+
 ![cloudbean](http://7xjhy3.com1.z0.glb.clouddn.com/alipay-qrcode.jpg-qrcode)
+
 # 图书自助借还系统使用帮助
 
 自助借还系统具备查找图书所在位置、借阅图书、归还图书三大功能，分别对应应用底部三个按钮，现将系统的使用方法展示如下：
