@@ -79,19 +79,16 @@ app.directive('searchBook', function($timeout, $ionicLoading, $ionicPlatform) {
                 scope.search.value = '';
             };
         },
-        template: `  
+        template: `
                     <div class="item item-input-inset">
                         <label class="item-input-wrapper">
-                          <input type="text" placeholder="{{placeholder}}" ng-model="search.value">
+                        <input type="text" placeholder="{{placeholder}}" ng-model="search.value" style="width:100%;">
                         </label>
-                         <button class="button button-small" ng-click="clearSearch()">
-                         cancel
+                        <a class="button button-icon icon ion-ios-close-empty " ng-show="search.value.length > 0"  ng-click="clearSearch()"> </a>
+                        <button class="button button-small button-positive" ng-click="searchBooks()">
+        &nbsp;&nbsp;搜&nbsp;&nbsp;&nbsp;&nbsp;索&nbsp;&nbsp;
                         </button>
-                        <button class="button button-small" ng-click="searchBooks()">
-                          Search
-                        </button>
-                      </div>                
-                    
+                        </div>
                   `
-    };
+};
 });

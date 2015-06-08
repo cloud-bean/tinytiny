@@ -2,7 +2,7 @@
     <ion-content padding="true" class="has-header has-footer">
         <!-- search book bar directive -->
         <div class="list padding" ng-controller="returnBookCtrl">
-            <div class=" bar bar-header item-input-inset" >
+
                 <return-book placeholder="请输入手机号"
                                model="member"
                                minlen="11"
@@ -12,35 +12,24 @@
                                total="totalNumber"
                                source="getMemberByPhone(number)">
                 </return-book>
-            </div>
+
 
             <!--会员信息-->
             <div class="list card" ng-show="member">
                 <div class="item item-divider">会员信息</div>
                 <div class="item item-body">
                     <div>
-                        <p>卡号：
-                            <strong>{{member.card_number}}</strong>
-                        </p>
 
-                        <p>宝贝名字：
-                            <strong>{{member.baby_name}}</strong>
-                        </p>
-
-                        <p>手机号：
-                            <strong>{{member.phone_number}}</strong>
+                        <p>宝贝：
+                            <strong>{{member.baby_name}}({{member.card_number}})</strong>
                         </p>
 
                         <p>办卡时间：
                             <strong>{{member.active_time | date:'yyyy/MM/dd' }}</strong>
                         </p>
 
-                        <p>会员期限：
-                            <strong>{{member.valid_days}}天</strong>
-                        </p>
-
                         <p>有效期至：
-                            <strong>{{member.end_time | date:'yyyy/MM/dd'}}</strong>
+                            <strong>{{member.end_time | date:'yyyy/MM/dd'}}({{member.valid_days}}天)</strong>
                         </p>
 
                         <p>借阅状态：
@@ -90,12 +79,14 @@
                     <i class="icon "
                        ng-class="{'ion-ios-locked': !isValid(secretKey),  'ion-checkmark-circled': isValid(secretKey)}">
                      </i>
-                    <input type="password" placeholder="请寻找工作人员输入口令" ng-model="secretKey">
+                    <input type="password" placeholder="请寻找工作人员输入口令" ng-model="secretKey" style="width:100%;">
                 </div>
             </div>
 
+
             <!--提交还书操作按钮-->
             <button ng-show="checkedCount && isValid(secretKey)"
+                    ng-disabled="isSubmit"
                     class="button-positive button-full  button"
                     ng-click="returnSelectedBooks()">选好了，还书！</button>
 

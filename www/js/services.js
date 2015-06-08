@@ -3,6 +3,7 @@
 app.constant('GENERAL_CONFIG', {
   //baseUrl: 'http://localhost:3000',
   baseUrl: 'http://hbg.herokuapp.com',
+  //baseUrl: 'http://hbg-pre-build.herokuapp.com',
   apiKey: 'xinnix',
   max_number: 999,
   secretKey: 'ok798'

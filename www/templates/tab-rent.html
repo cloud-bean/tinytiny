@@ -3,7 +3,7 @@
         <!-- search book bar directive -->
         <span class="error-msg" ng-bind="error"></span>
 
-        <div class="bar bar-header item-input-inset" >
+        <div class="list" >
             <member-search
                     placeholder="输入会员手机号"
                     minlength="11"
@@ -14,7 +14,35 @@
             </member-search>
         </div>
 
-        <div class="bar bar-header item-input-inset" >
+
+        <span ng-show='member.locked' class="assertive">已锁定，不可借书。</span>
+        <div ng-if="member.card_number && !member.locked" class="list card ">
+            <div class="item item-icon-left">
+                <i ng-class="{'icon ion-woman royal': !member.isBoy, 'icon ion-man calm': member.isBoy }"></i>
+                {{ member.baby_name}}({{ member.card_number }})
+            </div>
+            <div class="item item-icon-left">
+                <i class="icon ion-ios-calendar"></i>
+                到期日期：{{ member.end_time| date:'yyyy-MM-dd'}}({{ member.valid_days }}天)
+            </div>
+
+            <div class="item item-icon-left">
+                <i class="icon ion-pie-graph"></i>
+                {{ member.max_book - member.can_rent_count }}本借阅中 / {{ member.max_book }} 本单次可借数目
+            </div>
+
+            <!--<span > {{ member.baby_name}}({{ member.card_number }})</span><br/>-->
+            <!--<p>会员卡号：{{ member.card_number }}</p>-->
+            <!--<p>会员手机：{{ member.phone_number }}</p>-->
+            <!--<p>宝宝名字：{{ member.baby_name}}</p>-->
+            <!--<p>激活时间：{{ member.active_time | date:'yyyy-MM-dd'}}</p>-->
+            <!--<p>有效天数：{{ member.valid_days }}</p>-->
+            <!--<span>到期日期：{{ member.end_time| date:'yyyy-MM-dd'}}({{ member.valid_days }}天)</span><br/>-->
+            <!--<span>当前借阅状态：{{ member.max_book - member.can_rent_count }}本借阅中 / {{ member.max_book }} 本单次可借数目</span>-->
+            <!--<p>本次最多可借：{{ member.can_rent_count}}本</p>-->
+        </div>
+
+        <div class="list" >
             <book-search
                     placeholder="输入绘本的入库编码（封面或第一页 云豆绘本馆 条码号）"
                     minlength="12"
@@ -23,18 +51,6 @@
                     filter="book_filter"
                     source="getBookByInvCode(invCode)">
             </book-search>
-        </div>
-
-        <div ng-if="member.card_number" class="item ">
-            <p>会员卡号：{{ member.card_number }}</p>
-            <p>会员手机：{{ member.phone_number }}</p>
-            <p>宝宝名字：{{ member.baby_name}}</p>
-            <p>激活时间：{{ member.active_time | date:'yyyy-MM-dd'}}</p>
-            <p>有效天数：{{ member.valid_days }}</p>
-            <p>过期日期：{{ member.end_time| date:'yyyy-MM-dd'}}</p>
-            <p ng-show='member.locked'>已锁定，不可借书。}</p>
-            <p>当前借阅状态：{{ member.max_book - member.can_rent_count }}本借阅中 / {{ member.max_book }} 本单次可借数目</p>
-            <p>本次最多可借：{{ member.can_rent_count}}本</p>
         </div>
         <div ng-show="searchedBook.name" class="item item-remove-animate item-avatar item-icon-right"
                   type="item-text-wrap" >
@@ -74,12 +90,16 @@
                     <i class="icon "
                        ng-class="{' ion-ios-locked': !isValid(secretKey),  'positive icon-large ion-checkmark-circled': isValid(secretKey)}">
                     </i>
-                    <input type="password" placeholder="请寻找工作人员输入口令" ng-model="secretKey">
+                    <input type="password" placeholder="请寻找工作人员输入口令" ng-model="secretKey" style="width:100%;">
                 </div>
             </div>
 
-            <div class="item">
+            <div class="item" ng-hide="canRent()">
+                <span class="assertive">{{ warnMessage }}</span>
+            </div>
+            <div class="item" ng-show="canRent()">
                 <button ng-show="isValid(secretKey)" class="button button-calm button-full"
+                        ng-disabled="isSubmit"
                         ng-click="rentBook(member._id)">选好了，借书</button>
             </div>
 

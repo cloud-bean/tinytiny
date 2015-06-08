@@ -1,10 +1,11 @@
 'use strict';
 
 app.controller('rentBookCtrl',
-    ['$scope', '$ionicPopup', '$state','Book', 'Member', 'GENERAL_CONFIG', '$ionicScrollDelegate',
-    function($scope, $ionicPopup, $state, Book, Member, GENERAL_CONFIG, $ionicScrollDelegate){
+    ['$scope', '$ionicPopup', '$state','Book', 'Member', 'GENERAL_CONFIG', '$ionicLoading', '$ionicScrollDelegate',
+    function($scope, $ionicPopup, $state, Book, Member, GENERAL_CONFIG, $ionicLoading, $ionicScrollDelegate){
     $scope.init = function(){
         $ionicScrollDelegate.scrollTop(); // 滚动到top
+        $scope.isSubmit = false;
         $scope.books = [];
         $scope.member = {};
         $scope.resultMessage = '';
@@ -62,7 +63,25 @@ app.controller('rentBookCtrl',
     $scope.clearData = function(){
         $scope.init();
     };
-    
+
+    $scope.canRent = function(){
+        if($scope.member.locked){
+            $scope.warnMessage = "您的账户目前已被锁定，请联系工作人员激活。";
+            return false;
+        }
+
+        if(parseInt($scope.member.end_time) < parseInt(new Date().getTime())){
+            $scope.warnMessage = "您的借书有效期已到。";
+            return false;
+        }
+
+        if ($scope.member.can_rent_count < $scope.checkedCount){
+            $scope.warnMessage = "您不能借这么多本书，请先还书或者少借几本书。";
+            return false;
+        }
+
+        return true;
+    };
     $scope.toggleSelected = function(index){
         var oldSelectedStatus = $scope.books[index].isSelected;
         $scope.books[index].isSelected = !oldSelectedStatus;
@@ -75,7 +94,7 @@ app.controller('rentBookCtrl',
     $scope.alertAndJump = function (message){
         // 1. 弹出提示框，
         // 2. 点击确定返回首页 即搜索页
-
+        $ionicLoading.hide();
         var alertPopup = $ionicPopup.alert({
             title: '借书操作结果',
             template: message
@@ -93,6 +112,12 @@ app.controller('rentBookCtrl',
         $scope.succCount = 0;  // 检查成功执行借书操作的记录数
         $scope.failCount = 0;
         var _books = $scope.books;
+
+        $scope.isSubmit = true;
+
+        $ionicLoading.show({
+            template:"<spinner></spinner><br/>借书中..."
+        });
 
         for(var i = 0; count && (i < _books.length); i++){
             if (_books[i].isSelected) {  // 判断是否是选中。

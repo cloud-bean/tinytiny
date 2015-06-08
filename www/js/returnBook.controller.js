@@ -1,13 +1,15 @@
 'use strict';
 
 app.controller('returnBookCtrl',
-    ['$scope', '$timeout', '$state', '$ionicPopup', 'Member', 'Book', 'GENERAL_CONFIG', '$ionicScrollDelegate',
-        function($scope, $timeout, $state, $ionicPopup, Member, Book, GENERAL_CONFIG, $ionicScrollDelegate){
+    ['$scope', '$timeout', '$state', '$ionicPopup', 'Member', 'Book', 'GENERAL_CONFIG', '$ionicLoading', '$ionicScrollDelegate',
+        function($scope, $timeout, $state, $ionicPopup, Member, Book, GENERAL_CONFIG, $ionicLoading, $ionicScrollDelegate){
 
     $scope.getMemberByPhone = function (number) {
         return Member.getMemberByPhone(number);
     };
 
+
+    $scope.isSubmit = false;
     $scope.checkedCount = 0;
     $scope.resultMessage = '';
     $scope.isAllSelected = false;
@@ -49,6 +51,7 @@ app.controller('returnBookCtrl',
     };
 
     $scope.alertAndJump = function(message){
+        $ionicLoading.hide();
         // 1. 弹出提示框，
         var alertPopup = $ionicPopup.alert({
             title: '还书操作结果',
@@ -61,12 +64,16 @@ app.controller('returnBookCtrl',
     };
 
     $scope.returnSelectedBooks = function(){
+        $scope.isSubmit = true;
+
         var count = $scope.checkedCount; // 共有几本要还。
         $scope.succCount = 0;  // 检查成功执行还书操作的记录数
         $scope.failCount = 0;
         var _records = $scope.records;
 
-
+        $ionicLoading.show({
+            template:"<spinner></spinner><br/>还书中..."
+        });
 
         for(var i = 0; count && (i < _records.length); i++){
             if (_records[i].isSelected) {  // 判断是否是选中要归还的。
