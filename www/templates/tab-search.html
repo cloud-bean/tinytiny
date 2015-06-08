@@ -4,11 +4,10 @@
 
         <!-- search book bar directive -->
         <div class="list" >
-            <div class="bar bar-header item-input-inset" >
-                <search-book placeholder="搜索绘本..."
+            <search-book placeholder="搜索绘本..."
                 model="books" error="error"
                 source="getByName(str)"></search-book>
-            </div>
+           
             <span ng-show="error" class="error-msg">{{error}}</span>
             <ion-list class="padding">
                 <ion-item class="item-remove-animate item-avatar item-icon-right"
