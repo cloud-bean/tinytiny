@@ -89,6 +89,7 @@
     * 15349216763（辛老师）
 > * 在线支付地址
 ![cloudbean](http://7xjhy3.com1.z0.glb.clouddn.com/alipay-qrcode.jpg-qrcode)
+
 ##关于作者
 
 ```javascript
@@ -97,6 +98,3 @@
     version:"1.01"
   }
 ```
-
-
-  [1]: http://www.cloud-bean.com
