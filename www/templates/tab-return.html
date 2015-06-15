@@ -44,7 +44,7 @@
         <div ng-if="member">
             <h3> 正在借阅中的图书</h3>
             <label class="toggle toggle-small">
-                <input type="checkbox"  ng-click="toggleSelect()" ng-checked="isAllSelected">
+                <input type="checkbox"  ng-click="toggleSelectAll()" ng-checked="isAllSelected">
                 <div class="track">
                     <div class="handle"></div>
                 </div>
@@ -56,19 +56,22 @@
 
         <!--显示正在借阅的图书列表-->
         <ion-list ng-show="records.length>0">
-            <ion-item class="item-remove-animate item-icon-right"
+            <ion-item class="item-remove-animate item-icon-right  item-avatar"
                 ng-repeat="record in records"
                 class="item-text-wrap">
+                 <img ng-src="{{record.inventory.img || 'http://cloudbean.qiniudn.com/mob-gray-logo.png'}}" alt="封面图">
                 <h3 ng-class="{positive: record.isSelected}">{{record.inventory.name}}</h3>
                 <p><i class="ion-ios-barcode">&nbsp;&nbsp;{{record.inventory.inv_code}}</i>&nbsp;&nbsp;&nbsp;&nbsp;
                 <i class="ion-ios-location">&nbsp;&nbsp;{{record.inventory.location}}</i> </p>
-                <i class="icon ion-chevron-right "></i>
+    <!--             <i class="icon ion-chevron-right "></i>
                 <ion-option-button class="button-positive" ng-click="add($index)">
                     选中
                 </ion-option-button>
                 <ion-option-button class="button-assertive" ng-click="remove($index)">
                     不选
-                </ion-option-button>
+                </ion-option-button> -->
+                   <i  ng-click="toggleSelected($index)"
+                    ng-class="{'icon positive ion-ios-circle-filled': record.isSelected, 'icon ion-ios-circle-outline': !record.isSelected}"></i>
             </ion-item>
         
             <!--输入工作人员口令，正确的口令则可以让提交按钮显示。-->

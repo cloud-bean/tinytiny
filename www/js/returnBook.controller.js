@@ -62,13 +62,22 @@ app.controller('returnBookCtrl',
         $scope.records[index].isSelected = true;
       };
 
-      $scope.toggleSelect = function () {
+      $scope.toggleSelectAll= function () {
         $scope.isAllSelected = !$scope.isAllSelected;
         $scope.checkedCount = $scope.isAllSelected ? $scope.records.length : 0;
         for(var index=0; index< $scope.records.length; index++){
           $scope.records[index].isSelected = $scope.isAllSelected;
         }
         console.log('selectAll to ' +  $scope.isAllSelected.toString());
+      };
+      
+      $scope.toggleSelected = function(index){
+        var oldSelectedStatus = $scope.records[index].isSelected;
+        $scope.records[index].isSelected = !oldSelectedStatus;
+        if (!oldSelectedStatus)
+          $scope.checkedCount++;
+        else
+          $scope.checkedCount--;
       };
 
       $scope.searchMembers = function(){
