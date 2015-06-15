@@ -1,12 +1,16 @@
 'use strict';
 
 app.constant('GENERAL_CONFIG', {
-  //baseUrl: 'http://localhost:3000',
-  baseUrl: 'http://hbg.herokuapp.com',
+  // baseUrl: 'http://localhost:3000',
+  baseUrl: 'https://hbg.herokuapp.com',
   //baseUrl: 'http://hbg-pre-build.herokuapp.com',
   apiKey: 'xinnix',
   max_number: 999,
-  secretKey: 'ok798'
+  secretKey: 'ok798',
+  netTimeout: 3000,
+  netTimeoutLong: 6000,
+  netErr: '无法连接服务器，请检查你的网络设置后重试',
+  serverErr: '服务器'
 });
 
 app.factory('Inventory', ['$http', '$q', 'GENERAL_CONFIG', function($http, $q, GENERAL_CONFIG){
@@ -15,9 +19,11 @@ app.factory('Inventory', ['$http', '$q', 'GENERAL_CONFIG', function($http, $q, G
   self.getByName = function(name) {
     var _url = GENERAL_CONFIG.baseUrl + '/inventories/mob/name/' + name;
     var deferred = $q.defer();
-    $http.get(_url).success(function(data){
+    $http.get(_url, {timeout: GENERAL_CONFIG.netTimeout}).success(function(data){
       deferred.resolve(data);
-    }).error(function(err){
+    }).error(function(err, status){
+      if (status === 0 )
+        err = GENERAL_CONFIG.netErr;
       deferred.reject(err);
     });
 
@@ -28,11 +34,12 @@ app.factory('Inventory', ['$http', '$q', 'GENERAL_CONFIG', function($http, $q, G
 
 app.factory('Member', ['$http', '$q', 'GENERAL_CONFIG', function($http, $q, GENERAL_CONFIG){
   var self = this;
-  
+
   self.getMemberByPhone = function(number) {
     var deferred = $q.defer();
-    $http.get(GENERAL_CONFIG.baseUrl + '/members/mob/phone/' + number)
-    .success(function(data){
+    $http.get(GENERAL_CONFIG.baseUrl + '/members/mob/phone/' + number, {timeout: GENERAL_CONFIG.netTimeout})
+      .success(function(data, status){
+        console.log('status', status);
         // data struct:
         // { member: member,
         //   rentCount: count,
@@ -40,10 +47,14 @@ app.factory('Member', ['$http', '$q', 'GENERAL_CONFIG', function($http, $q, GENE
         var active_time = new Date(data.member.active_time).getTime();
         data.end_time = active_time + parseInt(data.member.valid_days)*24*3600*1000;
         deferred.resolve(data);
-      
-    }).error(function(err){
-      deferred.reject(err);
-    });
+
+      }).error(function(err, status){
+        console.log('status', status);
+        if ( status === 0 ) {
+          err = GENERAL_CONFIG.netErr;
+        }
+        deferred.reject(err);
+      });
 
     return deferred.promise;
   };
@@ -51,12 +62,14 @@ app.factory('Member', ['$http', '$q', 'GENERAL_CONFIG', function($http, $q, GENE
   // get the count of the member renting now
   self.getRentCount = function (mId) {
     var deferred = $q.defer();
-    $http.get(GENERAL_CONFIG.baseUrl + '/records/mob/rentCount/' + mId)
-    .success(function(data){
+    $http.get(GENERAL_CONFIG.baseUrl + '/records/mob/rentCount/' + mId, {timeout: GENERAL_CONFIG.netTimeout})
+      .success(function(data){
         deferred.resolve(data.count); // data as { count: x}
-    }).error(function(err){
+      }).error(function(err, status){
+        if (status === 0 )
+          err = GENERAL_CONFIG.netErr;
         deferred.reject(err);
-    });
+      });
 
     return deferred.promise;
   };
@@ -70,9 +83,11 @@ app.factory('Book', function($http, $q, $timeout, GENERAL_CONFIG) {
   self.getBookByInvCode = function (invCode){
     var deferred = $q.defer();
     var url = GENERAL_CONFIG.baseUrl + '/inventories/invCode/' + invCode;
-    $http.get(url, {cache: false}).success(function(data){
+    $http.get(url, {cache: false, timeout: GENERAL_CONFIG.netTimeout}).success(function(data){
       deferred.resolve(data);
-    }).error(function(err){
+    }).error(function(err, status){
+      if (status === 0 )
+        err = GENERAL_CONFIG.netErr;
       deferred.reject(err);
     });
     return deferred.promise;
@@ -82,10 +97,14 @@ app.factory('Book', function($http, $q, $timeout, GENERAL_CONFIG) {
     var _url = GENERAL_CONFIG.baseUrl + '/inventories/' + id;
     var deferred = $q.defer();
 
-    $http.get(_url).success(function(data){
-        deferred.resolve(data);
-    }).error(function(err){
-        deferred.reject('faild to get the book');
+    $http.get(_url, {timeout: GENERAL_CONFIG.netTimeout}).success(function(data){
+      deferred.resolve(data);
+    }).error(function(err, status){
+      if (status === 0 ){
+        err = GENERAL_CONFIG.netErr;
+        deferred.reject(err);
+      }
+      deferred.reject('faild to get the book');
     });
 
     return deferred.promise;
@@ -100,14 +119,16 @@ app.factory('Book', function($http, $q, $timeout, GENERAL_CONFIG) {
     var deferred = $q.defer();
     var url = GENERAL_CONFIG.baseUrl + '/records/mob/' + mId;
 
-    $http.get(url).success(function(data){
+    $http.get(url, {timeout: GENERAL_CONFIG.netTimeout}).success(function(data){
       var records = [];
       for(var i=0; i < data.length; i++){
         if (data[i].status === 'R') // R: renting
           records.push(data[i]);
       }
       deferred.resolve(records);
-    }).error(function(err){
+    }).error(function(err, status){
+      if (status === 0 )
+        err = GENERAL_CONFIG.netErr;
       deferred.reject(err);
     });
     return deferred.promise;
@@ -123,9 +144,14 @@ app.factory('Book', function($http, $q, $timeout, GENERAL_CONFIG) {
     var deferred = $q.defer();
     var url = GENERAL_CONFIG.baseUrl + '/records/mob/return/' + recordId;
     // todo: 这里需要加上一个 验证码，后端验证权限。
-    $http.get(url).success(function(data){
+    $http.get(url, {timeout: GENERAL_CONFIG.netTimeoutLong}).success(function(data){
       deferred.resolve(recordBookName);  // if succ, data shoule be record obj.
-    }).error(function(err){
+    }).error(function(err, status){
+      if (status === 0 ){
+        err = GENERAL_CONFIG.netErr;
+        deferred.reject(err);
+      }
+
       deferred.reject(recordBookName);
     });
     return deferred.promise;
@@ -153,12 +179,17 @@ app.factory('Book', function($http, $q, $timeout, GENERAL_CONFIG) {
       url: url,
       data: dataStr,
       method: 'POST',
+      timeout: GENERAL_CONFIG.netTimeoutLong,
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded'
       }
     }).success(function(data){
       deferred.resolve(bookName);
-    }).error(function(err){
+    }).error(function(err, status){
+      if (status === 0 ) {
+        err = GENERAL_CONFIG.netErr;
+        deferred.reject(err);
+      }
       deferred.reject(bookName);
     });
 

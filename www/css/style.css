@@ -1,4 +1,26 @@
 /* Empty. Add your own CSS if you like */
 .error-msg{
-    color: #ef473a;
+    color: #FF6666;
+}
+
+.warn-msg{
+    color: #FF9966;
+}
+
+.info-msg{
+}
+
+.help-ul li{
+
+}
+
+.help-table {
+	padding: 5px;
+	text-align:center;
+	margin: 0 auto;
+	width: 90%;
+}
+
+.help-table tr td{
+	padding-right: 10px;
 }
