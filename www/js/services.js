@@ -6,7 +6,7 @@ app.constant('GENERAL_CONFIG', {
   //baseUrl: 'http://hbg-pre-build.herokuapp.com',
   apiKey: 'xinnix',
   max_number: 999,
-  secretKey: 'ok798',
+  secretKey: 'yundou',
   netTimeout: 3000,
   netTimeoutLong: 6000,
   netErr: '无法连接服务器，请检查你的网络设置后重试',
