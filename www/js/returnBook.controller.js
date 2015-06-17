@@ -1,8 +1,8 @@
 'use strict';
 
 app.controller('returnBookCtrl',
-  ['$scope', '$timeout', '$state', '$ionicPopup', 'Member', 'Book', 'GENERAL_CONFIG', '$ionicLoading', '$ionicScrollDelegate',
-    function($scope, $timeout, $state, $ionicPopup, Member, Book, GENERAL_CONFIG, $ionicLoading, $ionicScrollDelegate){
+  ['$scope', '$timeout', '$state', '$ionicPopup', 'Member', 'Book', 'GENERAL_CONFIG', '$ionicLoading', '$ionicScrollDelegate','$rootScope',
+    function($scope, $timeout, $state, $ionicPopup, Member, Book, GENERAL_CONFIG, $ionicLoading, $ionicScrollDelegate,$rootScope){
       var getRecordsByMemberId = function (id) {
         // get the books
         Book.getReturnBooksByMemberId(id).then(function(results){
@@ -130,7 +130,7 @@ app.controller('returnBookCtrl',
         });
 
         clearData();
-
+        $rootScope.clearSearch();
         alertPopup.then(function (res) {
           $state.go('tab.search');
         })

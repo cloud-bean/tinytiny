@@ -1,14 +1,14 @@
 'use strict';
 
 app.controller('searchBookCtrl', 
-        ['$scope','Inventory', '$timeout', '$ionicLoading', '$ionicPlatform',
-        function($scope, Inventory, $timeout, $ionicLoading, $ionicPlatform){
+        ['$scope','Inventory', '$timeout', '$ionicLoading', '$ionicPlatform','$rootScope',
+        function($scope, Inventory, $timeout, $ionicLoading, $ionicPlatform,$rootScope){
     
     var minSearchLength = 2;
     $scope.search = {
         value: ''
     };
-    
+   
     var MESSAGE = {
         'error': {
             'netdown': '网络错误',
@@ -36,7 +36,7 @@ app.controller('searchBookCtrl',
         clearMsg();
     }
 
-    $scope.clearSearch = function () {
+    $rootScope.clearSearch = function () {
         $scope.search.value = '';
         clearState();
     }

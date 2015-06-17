@@ -1,8 +1,8 @@
 'use strict';
 
 app.controller('rentBookCtrl',
-  ['$scope', '$ionicPopup', '$state','Book', 'Member', 'GENERAL_CONFIG', '$ionicLoading', '$ionicScrollDelegate',
-    function($scope, $ionicPopup, $state, Book, Member, GENERAL_CONFIG, $ionicLoading, $ionicScrollDelegate){
+  ['$scope', '$ionicPopup', '$state','Book', 'Member', 'GENERAL_CONFIG', '$ionicLoading', '$ionicScrollDelegate','$rootScope',
+    function($scope, $ionicPopup, $state, Book, Member, GENERAL_CONFIG, $ionicLoading, $ionicScrollDelegate,$rootScope){
       $scope.init = function(){
         $ionicScrollDelegate.scrollTop(); // 滚动到top
         $scope.isSubmit = false;
@@ -182,6 +182,7 @@ app.controller('rentBookCtrl',
           title: '借书操作结果',
           template: message
         });
+        $rootScope.clearSearch();
 
         alertPopup.then(function (res) {
           $state.go('tab.search');
