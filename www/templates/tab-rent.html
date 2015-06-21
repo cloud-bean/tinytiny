@@ -34,7 +34,7 @@
 
         </ion-list>
 
-        <ion-list>
+        <ion-list ng-if="member.card_number && !member.locked">
             <ion-item class=" item-input-inset">
                 <label class="item-input-wrapper">
                     <i class="icon ion-ios-barcode"></i>&nbsp;&nbsp;&nbsp;&nbsp;
