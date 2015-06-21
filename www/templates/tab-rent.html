@@ -67,7 +67,7 @@
             </ion-item>
 
             <!--输入口令，口令正确显示借书按钮，点击按钮执行借书操作-->
-            <div class="item item-input-inset" >
+          <!--   <div class="item item-input-inset" >
                 <div class="item-input-wrapper" >
                     <i class="icon "
                        ng-class="{' ion-ios-locked': !isValid(secretKey),  'positive icon-large ion-checkmark-circled': isValid(secretKey)}">
@@ -75,13 +75,14 @@
                     <input type="password" placeholder="请寻找工作人员输入口令" ng-model="secretKey" style="width:100%;">
                 </div>
             </div>
-
+            ng-disabled="isSubmit || !isValid(secretKey)"
+ -->
             <div class="item" ng-show="warnMessage">
                 <span class="assertive">{{ warnMessage }}</span>
             </div>
             <div class="item">
                 <button class="button button-calm button-full"
-                        ng-disabled="isSubmit || !isValid(secretKey)"
+                        
                         ng-click="rentBook(member._id)">选好了，借书</button>
             </div>
 

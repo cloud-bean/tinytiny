@@ -75,7 +75,7 @@
             </ion-item>
         
             <!--输入工作人员口令，正确的口令则可以让提交按钮显示。-->
-            <div class="item item-input-inset" >
+          <!--   <div class="item item-input-inset" >
                 <div class="item-input-wrapper" >
                     <i ng-class="{'icon ion-ios-locked': !isValid(secretKey),  'icon ion-checkmark-circled positive': isValid(secretKey)}">
                      </i>
@@ -83,11 +83,13 @@
                 </div>
            
 
-            </div>
+            </div> 
+ng-disabled="hasSubmit || !isValid(secretKey)"
+            -->
             
             <!--提交还书操作按钮-->
             <span class="error-msg" ng-bind="submit_err"></span>
-            <button ng-disabled="hasSubmit || !isValid(secretKey)"
+            <button 
                     class="button-positive button-full  button"
                     ng-click="returnSelectedBooks()">选好了，还书！</button>
         </ion-list>

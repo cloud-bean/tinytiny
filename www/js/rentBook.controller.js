@@ -156,11 +156,11 @@ app.controller('rentBookCtrl',
           return false;
         }
 
-        if(!$scope.isValid($scope.secretKey)) {
-          $scope.warnMessage = '口令错误，请重新输入';
-          $scope.secretKey = '';
-          return false;
-        }
+        // if(!$scope.isValid($scope.secretKey)) {
+        //   $scope.warnMessage = '口令错误，请重新输入';
+        //   $scope.secretKey = '';
+        //   return false;
+        // }
 
         $scope.warnMessage = '';
         return true;

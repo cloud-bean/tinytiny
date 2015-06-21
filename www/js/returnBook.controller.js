@@ -149,10 +149,10 @@ app.controller('returnBookCtrl',
           return ;
         }
 
-        if (!$scope.isValid($scope.secretKey)){
-          $scope.submit_err = '口令错误，请重新输入';
-          return ;
-        }
+        // if (!$scope.isValid($scope.secretKey)){
+        //   $scope.submit_err = '口令错误，请重新输入';
+        //   return ;
+        // }
 
         $scope.hasSubmit = true;
 
