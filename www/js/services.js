@@ -7,7 +7,7 @@ app.constant('GENERAL_CONFIG', {
   apiKey: 'xinnix',
   max_number: 999,
   secretKey: 'yundou',
-  netTimeout: 3000,
+  netTimeout: 6000,
   netTimeoutLong: 6000,
   netErr: '无法连接服务器，请检查你的网络设置后重试',
   serverErr: '服务器'
