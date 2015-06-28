@@ -26,6 +26,7 @@ app.controller('rentBookCtrl',
         $scope.search.phone = '';
         $scope.member_error = '';
         $scope.member = null;
+        $scope.books =  null; //解决选书人中途点击叉叉，被选择的图书无法消除的问题。
       };
 
       $scope.clearSearchBook = function () {
