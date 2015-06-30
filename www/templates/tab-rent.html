@@ -80,8 +80,8 @@
             <div class="item" ng-show="warnMessage">
                 <span class="assertive">{{ warnMessage }}</span>
             </div>
-            <div class="item">
-                <button class="button button-calm button-full"
+            <div class="item"  >
+                <button ng-disabled="!checkedCount" class="button button-calm button-full"
                         
                         ng-click="rentBook(member._id)">选好了，借书</button>
             </div>
