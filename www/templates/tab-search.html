@@ -2,37 +2,50 @@
     
     <ion-content padding="true" class="has-header has-footer">
 
-        <!-- search book bar directive -->
-        <div class="list" >
-            <div class="bar bar-header item-input-inset" >
-                <search-book placeholder="搜索绘本..."
+        <!-- search book bar -->
+        <ion-list class="padding"><!-- <div class="list" > -->
+           <!--  <div search-book placeholder="搜索绘本..."
                 model="books" error="error"
-                source="getByName(str)"></search-book>
-            </div>
-            <span ng-show="error" class="error-msg">{{error}}</span>
-            <ion-list class="padding">
-                <ion-item class="item-remove-animate item-avatar item-icon-right"
-                          ng-repeat="book in books"
-                          type="item-text-wrap"
-                          href="#/tab/search/{{book.id}}">
-                    <img ng-src="{{book.img || 'img/mob-gray-logo.png'}}" alt="封面图">
-                    <h2>{{book.name}}</h2>
-                    <p><i class="ion-ios-barcode">&nbsp;&nbsp;{{book.inv_code}}</i>&nbsp;&nbsp;&nbsp;&nbsp;
-                        <i class="ion-ios-location">&nbsp;&nbsp;{{book.location}}</i> </p>
-                    <i class="icon ion-chevron-right icon-accessory"></i>
+                source="getByName(str)">
+            </div> -->
 
-                </ion-item>
-            </ion-list>
-        </div>
+            <div class="item item-input-inset" > 
+                <label class="item-input-wrapper">
+                    <input type="text" placeholder="搜索绘本书名" ng-model="search.value" style="width:100%;">
+                </label>
+                <a class="button button-icon  button-small icon ion-ios-close-empty " ng-show="search.value.length > 0"  ng-click="clearSearch()"> </a>
+                <button class="button button-small  button-positive" ng-click="searchBooks()">
+                &nbsp;&nbsp;搜&nbsp;&nbsp;&nbsp;&nbsp;索&nbsp;&nbsp;
+                </button>
+            </div>
+
+                <span ng-show="error" class="error-msg">{{error}}</span>
+                <span ng-show="warning" class="warn-msg">{{warning}}</span>
+                <span ng-show="info" class="info-msg">{{info}}</span>
+        </ion-list>
+
+        <ion-list>
+            <ion-item class="item-remove-animate item-avatar item-icon-right"
+                      ng-repeat="book in books"
+                      type="item-text-wrap"
+                      href="#/tab/search/{{book.id}}">
+                <img ng-src="{{book.img || 'img/mob-gray-logo.png'}}" alt="封面图">
+                <h2>{{book.name}}</h2>
+                <p><i class="ion-ios-barcode">&nbsp;&nbsp;{{book.inv_code}}</i>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <i class="ion-ios-location">&nbsp;&nbsp;{{book.location}}</i> </p>
+                <i class="icon ion-chevron-right icon-accessory"></i>
+            </ion-item>
+        </ion-list>
+        <!-- </div> -->
 
         <div class="content " style="text-align: center;" ng-hide="books.length">
             <img  src="img/mob-logo.png">
-            <h4 >云豆亲子绘本馆</h4>
+            <h2 >云豆亲子绘本馆</h2>
             <br/>
             <p>最享受的时光&nbsp;&nbsp;&nbsp;&nbsp;最高贵的教养</p>
             <br/>
             <br/>
-            <a href="#" class="button button-small   button-calm">&nbsp;连结绘本世界&nbsp;</a>
+            <a href="#/tab/help" class="button button-outline button-calm button-small">&nbsp;连接绘本世界&nbsp;</a>
         </div>
 
     </ion-content>

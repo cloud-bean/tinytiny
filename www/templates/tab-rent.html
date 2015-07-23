@@ -1,61 +1,60 @@
-<ion-view title="会员借书" ng-init="init()">
+<ion-view title="会员借书" >
     <ion-content padding="true" class="has-header has-footer" ng-controller="rentBookCtrl">
         <!-- search book bar directive -->
-        <span class="error-msg" ng-bind="error"></span>
+        <ion-list >
+            <ion-item class="item-input-inset">
+                <label class="item-input-wrapper">
+                    <i class="icon ion-person"></i>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="text" placeholder="输入会员的手机号" ng-model="search.phone" style="width:100%;">
+                </label>
+                <a class="button button-icon button-small icon ion-ios-close-empty " ng-show="search.phone.length > 0" ng-click="clearSearchMember()"> </a>
+                <button class="button button-small button-outline button-positive" ng-click="searchMembers()">
+                    &nbsp;&nbsp;查找会员&nbsp;&nbsp;
+                </button>
+            </ion-item>
+            <span class="error-msg" ng-bind="member_error"></span>
+        </ion-list>
 
-        <div class="bar bar-header item-input-inset" >
-            <member-search
-                    placeholder="输入会员手机号"
-                    minlength="11"
-                    model="member"
-                    error="error"
-                    filter="member_filter"
-                    source="getMemberByPhone(phoneNumber)">
-            </member-search>
-        </div>
+        <span ng-show='member.locked' class="assertive">已锁定，不可借书。</span>
 
-        <div class="bar bar-header item-input-inset" >
-            <book-search
-                    placeholder="输入绘本的入库编码（封面或第一页 云豆绘本馆 条码号）"
-                    minlength="12"
-                    model="searchedBook"
-                    error="error"
-                    filter="book_filter"
-                    source="getBookByInvCode(invCode)">
-            </book-search>
-        </div>
+        <ion-list ng-if="member.card_number && !member.locked" class="list card ">
+            <ion-item class=" item-icon-left">
+                <i ng-class="{'icon ion-woman royal': !member.isBoy, 'icon ion-man calm': member.isBoy }"></i>
+                {{ member.baby_name}}({{ member.card_number }})
+            </ion-item>
+            <ion-item class=" item-icon-left">
+                <i class="icon ion-ios-calendar"></i>
+                到期日期：{{ member.end_time| date:'yyyy-MM-dd'}}({{ member.valid_days }}天)
+            </ion-item>
 
-        <div ng-if="member.card_number" class="item ">
-            <p>会员卡号：{{ member.card_number }}</p>
-            <p>会员手机：{{ member.phone_number }}</p>
-            <p>宝宝名字：{{ member.baby_name}}</p>
-            <p>激活时间：{{ member.active_time | date:'yyyy-MM-dd'}}</p>
-            <p>有效天数：{{ member.valid_days }}</p>
-            <p>过期日期：{{ member.end_time| date:'yyyy-MM-dd'}}</p>
-            <p ng-show='member.locked'>已锁定，不可借书。}</p>
-            <p>当前借阅状态：{{ member.max_book - member.can_rent_count }}本借阅中 / {{ member.max_book }} 本单次可借数目</p>
-            <p>本次最多可借：{{ member.can_rent_count}}本</p>
-        </div>
-        <div ng-show="searchedBook.name" class="item item-remove-animate item-avatar item-icon-right"
-                  type="item-text-wrap" >
-            <img ng-src="{{searchedBook.img || 'http://cloudbean.qiniudn.com/mob-gray-logo.png'}}" alt="封面图">
-            <h2>{{searchedBook.name}}</h2>
-            <p><i class="ion-ios-barcode">&nbsp;&nbsp;{{searchedBook.inv_code}}</i>&nbsp;&nbsp;&nbsp;&nbsp;
-                <i class="ion-ios-location">&nbsp;&nbsp;{{searchedBook.location}}</i>&nbsp;&nbsp;&nbsp;&nbsp;<br/>
-                <span>isRent {{searchedBook.isRent}}</span>
-                <i ng-class="{'ion-happy-outline': !searchedBook.isRent, 'ion-sad-outline': searchedBook.isRent}">&nbsp;&nbsp;{{searchedBook.isRent?'借出':'在馆'}}</i>
-            </p>
-            <i  ng-click="addBook(searchedBook)"
-                ng-class="{'icon ion-ios-circle-filled': searchedBook.isSelected, 'icon ion-ios-circle-outline': !searchedBook.isSelected}"></i>
-        </div>
+            <ion-item class=" item-icon-left">
+                <i class="icon ion-pie-graph"></i>
+                {{ member.max_book - member.can_rent_count }}本借阅中 / {{ member.max_book }} 本单次可借数目
+            </ion-item>
+
+        </ion-list>
+
+        <ion-list ng-if="member.card_number && !member.locked">
+            <ion-item class=" item-input-inset">
+                <label class="item-input-wrapper">
+                    <i class="icon ion-ios-barcode"></i>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="text" placeholder="输入绘本的入库编码(12位数字)" ng-model="search.invcode" style="width:100%;">
+                </label>
+                <a class="button button-icon button-small icon ion-ios-close-empty"  ng-show="search.invcode.length > 0" ng-click="clearSearchBook()"> </a>
+                <button class="button button-small button-balanced" ng-click="searchBook()">
+                    &nbsp;&nbsp;加入借书单&nbsp;&nbsp;
+                </button>
+            </ion-item>
+            <span class="error-msg" ng-bind="book_error"></span>
+        </ion-list>
+
 
         <!--the books list-->
         <ion-list class="padding" ng-show="books.length">
             <h3>计划借阅图书</h3>
             <ion-item class="item-remove-animate item-avatar item-icon-right"
                       ng-repeat="book in books"
-                      type="item-text-wrap"
-                    >
+                      type="item-text-wrap">
                 <img ng-src="{{book.img || 'http://cloudbean.qiniudn.com/mob-gray-logo.png'}}" alt="封面图">
                 <h2 ng-class="{'positive': book.isSelected}">{{book.name}}</h2>
                 <p><i class="ion-ios-barcode">&nbsp;&nbsp;{{book.inv_code}}</i>&nbsp;&nbsp;&nbsp;&nbsp;
@@ -65,21 +64,25 @@
                 </p>
                 <i  ng-click="toggleSelected($index)"
                     ng-class="{'icon positive ion-ios-circle-filled': book.isSelected, 'icon ion-ios-circle-outline': !book.isSelected}"></i>
-
             </ion-item>
 
             <!--输入口令，口令正确显示借书按钮，点击按钮执行借书操作-->
-            <div class="item item-input-inset" >
-                <div class="item-input-wrapper" ng-show="member.card_number && books.length && checkedCount">
+          <!--   <div class="item item-input-inset" >
+                <div class="item-input-wrapper" >
                     <i class="icon "
                        ng-class="{' ion-ios-locked': !isValid(secretKey),  'positive icon-large ion-checkmark-circled': isValid(secretKey)}">
                     </i>
-                    <input type="password" placeholder="请寻找工作人员输入口令" ng-model="secretKey">
+                    <input type="password" placeholder="请寻找工作人员输入口令" ng-model="secretKey" style="width:100%;">
                 </div>
             </div>
-
-            <div class="item">
-                <button ng-show="isValid(secretKey)" class="button button-calm button-full"
+            ng-disabled="isSubmit || !isValid(secretKey)"
+ -->
+            <div class="item" ng-show="warnMessage">
+                <span class="assertive">{{ warnMessage }}</span>
+            </div>
+            <div class="item"  >
+                <button ng-disabled="!checkedCount" class="button button-calm button-full"
+                        
                         ng-click="rentBook(member._id)">选好了，借书</button>
             </div>
 
